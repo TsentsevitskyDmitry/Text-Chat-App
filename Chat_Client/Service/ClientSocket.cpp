@@ -1,7 +1,21 @@
 #include "ClientSocket.h"
 
-void ClientSocket::try_connect()
+ClientSocket::~ClientSocket()
 {
+    disconnect();
+}
+
+void ClientSocket::disconnect()
+{
+    // cleanup
+    closesocket(ConnectSocket);
+    WSACleanup();
+}
+
+bool ClientSocket::try_connect()
+{
+    disconnect();
+
     int iResult;
     WSADATA wsaData;
 
@@ -9,7 +23,7 @@ void ClientSocket::try_connect()
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed: %d\n", iResult);
-        return;
+        return false;
     }
 
 
@@ -29,11 +43,11 @@ void ClientSocket::try_connect()
     if (iResult != 0) {
         printf("getaddrinfo failed: %d\n", iResult);
         WSACleanup();
-        return;
+        return false;
     }
 
 
-    SOCKET ConnectSocket = INVALID_SOCKET;
+    ConnectSocket = INVALID_SOCKET;
 
     // Attempt to connect to the first address returned by
     // the call to getaddrinfo
@@ -47,7 +61,7 @@ void ClientSocket::try_connect()
         printf("Error at socket(): %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         WSACleanup();
-        return;
+        return false;
     }
 
     // Connect to server.
@@ -67,58 +81,71 @@ void ClientSocket::try_connect()
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        return;
+        return false;
     }
 
 
-    int recvbuflen = DEFAULT_BUFLEN;
+//    int recvbuflen = DEFAULT_BUFLEN;
 
-    const char *sendbuf = "this is a test";
-    char recvbuf[DEFAULT_BUFLEN];
+//    const char *sendbuf = "this is a test";
+//    char recvbuf[DEFAULT_BUFLEN];
 
-    // Send an initial buffer
-    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
-    if (iResult == SOCKET_ERROR) {
-        printf("send failed: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return;
-    }
+//    // Send an initial buffer
+//    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+//    if (iResult == SOCKET_ERROR) {
+//        printf("send failed: %d\n", WSAGetLastError());
+//        closesocket(ConnectSocket);
+//        WSACleanup();
+//        return false;
+//    }
 
-    printf("Bytes Sent: %ld\n", iResult);
+//    printf("Bytes Sent: %ld\n", iResult);
 
-    // shutdown the connection for sending since no more data will be sent
-    // the client can still use the ConnectSocket for receiving data
-    iResult = shutdown(ConnectSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return;
-    }
+//    // shutdown the connection for sending since no more data will be sent
+//    // the client can still use the ConnectSocket for receiving data
+//    iResult = shutdown(ConnectSocket, SD_SEND);
+//    if (iResult == SOCKET_ERROR) {
+//        printf("shutdown failed: %d\n", WSAGetLastError());
+//        closesocket(ConnectSocket);
+//        WSACleanup();
+//        return false;
+//    }
 
-    // Receive data until the server closes the connection
-    do {
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0)
-            printf("Bytes received: %d\n", iResult);
-        else if (iResult == 0)
-            printf("Connection closed\n");
-        else
-            printf("recv failed: %d\n", WSAGetLastError());
-    } while (iResult > 0);
+//    // Receive data until the server closes the connection
+//    do {
+//        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+//        if (iResult > 0)
+//            printf("Bytes received: %d\n", iResult);
+//        else if (iResult == 0)
+//            printf("Connection closed\n");
+//        else
+//            printf("recv failed: %d\n", WSAGetLastError());
+//    } while (iResult > 0);
 
 
-    // shutdown the send half of the connection since no more data will be sent
-    iResult = shutdown(ConnectSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return;
-    }
+//    // shutdown the send half of the connection since no more data will be sent
+//    iResult = shutdown(ConnectSocket, SD_SEND);
+//    if (iResult == SOCKET_ERROR) {
+//        printf("shutdown failed: %d\n", WSAGetLastError());
+//        closesocket(ConnectSocket);
+//        WSACleanup();
+//        return false;
+//    }
 
-    // cleanup
-    closesocket(ConnectSocket);
-    WSACleanup();
+    return true;
+}
+
+bool ClientSocket::sendRaw(char *data, size_t size)
+{
+        // Send an initial buffer
+        int iResult = send(ConnectSocket, data, static_cast<int>(size), 0);
+        if (iResult == SOCKET_ERROR) {
+            printf("send failed: %d\n", WSAGetLastError());
+            closesocket(ConnectSocket);
+            WSACleanup();
+            return false;
+        }
+
+        printf("Bytes Sent: %ld\n", iResult);
+        return true;
 }

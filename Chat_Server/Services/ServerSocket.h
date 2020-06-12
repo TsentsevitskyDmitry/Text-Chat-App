@@ -1,6 +1,5 @@
-#ifndef CLIENTSOCHET_H
-#define CLIENTSOCHET_H
-
+#ifndef SERVERSOCKET_H
+#define SERVERSOCKET_H
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -10,29 +9,26 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 #include <iostream>
-
 #include "Messages/ServiceMessage.h"
 #include "Messages/ChatMessage.h"
+#include "Models/ClientInfo.h"
 
 using namespace std;
 
-#define DEFAULT_PORT "27015"
 #define DEFAULT_BUFLEN 1024
 
-
-class ClientSocket
+class ServerSocket
 {
 private:
-    SOCKET ConnectSocket;
+    SOCKET socket;
 
 public:
-    ~ClientSocket();
+    ServerSocket(SOCKET _socket) : socket(_socket) {}
+    ~ServerSocket();
 
-//    void setup();
-    bool try_connect();
-    void disconnect();
     bool sendRaw(char* data, size_t size);
-
+    bool recvRaw(char** buff, size_t* size);
+    bool recvRawBytes(char** buff, size_t* size, size_t buffLen);
 };
 
-#endif // CLIENTSOCHET_H
+#endif // SERVERSOCKET_H
