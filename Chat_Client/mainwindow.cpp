@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Service/ClientSocket.h"
-#include "Messages/ServiceMessage.h"
+#include "Messages/DataTypeMessage.h"
 #include "Messages/ChatMessage.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    controller.sendButtonClicked("test");
+    controller.sendButtonClicked(ui->sendEdit->text().toStdString());
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -28,5 +28,5 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    controller.testRegister();
+    controller.testRegister(ui->regEdit->text().toStdString());
 }

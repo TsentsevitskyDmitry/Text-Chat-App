@@ -20,9 +20,9 @@ void ServerController::start()
     while(1){
         SOCKET clientSocket = server.acceptClient();
         //
-        auto processor = [] (SOCKET clientSocket) {
+        auto processor = [this] (SOCKET clientSocket) {
             cout << "Client connected" << endl;
-            ClientProcessor p(clientSocket);
+            ClientProcessor p(&server, clientSocket);
             p.process();
             cout << "Client processed" << endl;
         };

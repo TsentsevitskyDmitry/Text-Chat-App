@@ -9,7 +9,7 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 #include <iostream>
-#include "Messages/ServiceMessage.h"
+#include "Messages/DataTypeMessage.h"
 #include "Messages/ChatMessage.h"
 #include "Models/ClientInfo.h"
 
@@ -21,10 +21,13 @@ class ServerSocket
 {
 private:
     SOCKET socket;
+    bool clientConnected;
 
 public:
-    ServerSocket(SOCKET _socket) : socket(_socket) {}
+    ServerSocket(SOCKET _socket) : socket(_socket), clientConnected(true) {}
     ~ServerSocket();
+
+    bool isClientConnected();
 
     bool sendRaw(char* data, size_t size);
     bool recvRaw(char** buff, size_t* size);

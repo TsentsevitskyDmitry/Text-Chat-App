@@ -4,21 +4,22 @@
 #include "Messages/BaseMessage.h"
 #include <stdint.h>
 
-class ServiceMessage : public BaseMessage
+class DataTypeMessage : public BaseMessage
 {
 private:
     uint8_t contentType;
     size_t contentSize;
 
 public:
-    ServiceMessage(uint8_t contentType, size_t contentSize);
-    ServiceMessage() : contentType(0), contentSize(0) {}
-    virtual ~ServiceMessage() {}
+    DataTypeMessage(uint8_t contentType, size_t contentSize);
+    DataTypeMessage() : contentType(0), contentSize(0) {}
+    virtual ~DataTypeMessage() {}
 
     void calculateSerializedSize();
     void serialize();
     void restore(char* data, size_t size);
 
+    MessageType getMessageType();
     uint8_t getContentType();
     size_t getContentSize();
 };

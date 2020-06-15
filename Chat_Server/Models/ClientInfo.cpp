@@ -1,6 +1,6 @@
 #include "ClientInfo.h"
 
-ClientInfo::ClientInfo()
+SOCKET ClientInfo::getSocket() const
 {
-
+    return socket;
 }

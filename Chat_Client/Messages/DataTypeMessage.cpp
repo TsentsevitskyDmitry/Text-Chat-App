@@ -1,13 +1,13 @@
-#include "ServiceMessage.h"
+#include "DataTypeMessage.h"
 #include <string>
 
-ServiceMessage::ServiceMessage(uint8_t contentType, size_t contentSize)
+DataTypeMessage::DataTypeMessage(uint8_t contentType, size_t contentSize)
 {
     this->contentType = contentType;
     this->contentSize = contentSize;
 }
 
-void ServiceMessage::calculateSerializedSize()
+void DataTypeMessage::calculateSerializedSize()
 {
     struct Data {
         uint8_t contentType;
@@ -16,7 +16,7 @@ void ServiceMessage::calculateSerializedSize()
     serializedSize = sizeof(Data);
 }
 
-void ServiceMessage::serialize()
+void DataTypeMessage::serialize()
 {
     clear();
     calculateSerializedSize();
@@ -30,7 +30,7 @@ void ServiceMessage::serialize()
 }
 
 
-void ServiceMessage::restore(char* data, size_t size)
+void DataTypeMessage::restore(char* data, size_t size)
 {
     calculateSerializedSize();
     struct {
@@ -43,12 +43,17 @@ void ServiceMessage::restore(char* data, size_t size)
     contentSize = sdata._contentSize;
 }
 
-uint8_t ServiceMessage::getContentType()
+MessageType DataTypeMessage::getMessageType()
+{
+    return MessageType::DATA_TYPE;
+}
+
+uint8_t DataTypeMessage::getContentType()
 {
     return contentType;
 }
 
-size_t ServiceMessage::getContentSize()
+size_t DataTypeMessage::getContentSize()
 {
     return contentSize;
 }

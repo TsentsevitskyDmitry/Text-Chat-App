@@ -7,7 +7,7 @@ bool ServerSocket::sendRaw(char *data, size_t size)
         if (iResult == SOCKET_ERROR) {
             printf("send failed: %d\n", WSAGetLastError());
             closesocket(socket);
-            WSACleanup();
+            clientConnected = false;
             return false;
         }
 
@@ -21,11 +21,10 @@ bool ServerSocket::recvRaw(char** buff, size_t* size)
     int iResult = recv(socket, recvbuff, DEFAULT_BUFLEN, 0);
     if (iResult > 0) {
         printf("Bytes received: %d\n", iResult);
-    } else if (iResult == 0)
-        printf("Connection closing...\n");
+    }
     else {
         printf("recv failed: %d\n", WSAGetLastError());
-        closesocket(socket);
+        clientConnected = false;
         return false;
     }
     *buff = recvbuff;
@@ -43,4 +42,9 @@ ServerSocket::~ServerSocket()
 {
     // cleanup
     closesocket(socket);
+}
+
+bool ServerSocket::isClientConnected()
+{
+    return clientConnected;
 }

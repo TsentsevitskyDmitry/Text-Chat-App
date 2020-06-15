@@ -11,7 +11,7 @@
 #include <iphlpapi.h>
 #include <iostream>
 
-#include "Messages/ServiceMessage.h"
+#include "Messages/DataTypeMessage.h"
 #include "Messages/ChatMessage.h"
 
 using namespace std;

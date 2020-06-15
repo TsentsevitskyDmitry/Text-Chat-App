@@ -1,60 +1,52 @@
 #include "ClientProcessor.h"
 
 
-bool ClientProcessor::registerClient(ClientInfo &info)
+ClientProcessor::~ClientProcessor()
 {
-    cout << "processing" << endl;
-    ServiceMessage sm;
-    recvServiceMessage(sm);
-
-    if(sm.getContentType() == MessageType::REGISTRATION){
-        RegisterMessage rm;
-        recvMessage(rm, sm.getContentSize());
-
-        cout << "name=" << rm.getName() << endl;
-    }
-    else{
-        // need some feedback to the client
-        return false;
-    }
-
-    return true;
+    releaseClient();
 }
 
 void ClientProcessor::process()
 {
-    ClientInfo info;
-    registerClient(info);
-
-
-}
-
-bool ClientProcessor::sendMessage(BaseMessage &message)
-{
-    message.serialize();
-    return socket.sendRaw(message.getSerializedData(), message.getSerializedSize());
-}
-
-bool ClientProcessor::recvMessage(BaseMessage &message, size_t buffSize)
-{
-    char* data = nullptr;
-    size_t size;
-    bool result = socket.recvRawBytes(&data, &size, buffSize);
-    if (result){
-        message.restore(data, size);
+    if(!registerClient()){
+        cout << "user already exist" << endl;
+        return;
     }
-    return result;
+    else{
+        cout << "done!!!" << endl;
+    }
+
+
+    while(helper.isClientConnected())
+    {
+        ChatMessage cm;
+        if(!helper.recvChatMessage(cm)){
+            return;
+        }
+
+        cout << clientName << ": " << cm.getData() << endl;
+    }
 }
 
-bool ClientProcessor::recvServiceMessage(ServiceMessage &message)
+bool ClientProcessor::registerClient()
 {
-    char* data = nullptr;
-    size_t size;
-    bool result = socket.recvRaw(&data, &size);
-    if (result){
-        message.restore(data, size);
+    bool success = helper.recvRegistrationName(clientName);
+    if(success){
+        server->lockClients();
+        auto clients = server->getClients();
+        auto [pair, result] = clients->insert({clientName, info});
+        success = result;
+        server->unlockClients();
     }
-    return result;
+    return success;
+}
+
+void ClientProcessor::releaseClient()
+{
+    server->lockClients();
+    auto clients = server->getClients();
+    clients->erase(clientName);
+    server->unlockClients();
 }
 
 

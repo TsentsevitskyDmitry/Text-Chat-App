@@ -9,6 +9,9 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 #include <iostream>
+#include <unordered_map>
+#include <mutex>
+#include "Models/ClientInfo.h"
 
 using namespace std;
 
@@ -19,14 +22,21 @@ class ChatServer
 private:
     SOCKET listenSocket;
     string port;
+    std::mutex mutex;
+    std::unordered_map<string, ClientInfo> clients;
 
 public:
-//    ClientHandler();
-//    ~ClientHandler();
+//    ChatServer();
+    ~ChatServer();
 
     bool bindServerSocket();
     void clean();
     SOCKET acceptClient();
+
+    void lockClients();
+    std::unordered_map<string, ClientInfo>* getClients();
+    void unlockClients();
+
 };
 
 #endif // CHATSERVER_H

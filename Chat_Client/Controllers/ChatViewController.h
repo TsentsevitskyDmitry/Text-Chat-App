@@ -11,9 +11,10 @@ private:
 public:
     ChatViewController();
 
-    void sendButtonClicked(std::string_view text);
     void testConnect();
-    void testRegister();
+    void testRegister(std::string_view name);
+    void sendButtonClicked(std::string_view text);
+
 };
 
 #endif // CHATVIEWCONTROLLER_H

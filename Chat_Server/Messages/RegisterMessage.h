@@ -10,7 +10,7 @@ private:
     std::string name;
 
 public:
-    RegisterMessage(std::string name);
+    RegisterMessage(std::string _name) : name(_name) {}
     RegisterMessage() : name("") {}
     virtual ~RegisterMessage() {}
 
@@ -18,6 +18,7 @@ public:
     void serialize();
     void restore(char* data, size_t size);
 
+    MessageType getMessageType();
     std::string_view getName();
 };
 #endif // REGISTERMESSAGE_H

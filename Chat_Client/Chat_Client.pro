@@ -30,22 +30,22 @@ SOURCES += \
         mainwindow.cpp \
     Service/ClientSocket.cpp \
     Messages/ChatMessage.cpp \
-    Messages/ServiceMessage.cpp \
     Service/ChatClient.cpp \
     Controllers/ChatViewController.cpp \
     Messages/RegisterMessage.cpp \
-    Messages/BaseMessage.cpp
+    Messages/BaseMessage.cpp \
+    Messages/DataTypeMessage.cpp
 
 HEADERS += \
         mainwindow.h \
     Service/ClientSocket.h \
     Messages/ChatMessage.h \
-    Messages/ServiceMessage.h \
     Service/ChatClient.h \
     Controllers/ChatViewController.h \
     Messages/RegisterMessage.h \
     Messages/BaseMessage.h \
-    Messages/MessageTypes.h
+    Messages/DataTypeMessage.h \
+    Messages/MessageType.h
 
 FORMS += \
         mainwindow.ui

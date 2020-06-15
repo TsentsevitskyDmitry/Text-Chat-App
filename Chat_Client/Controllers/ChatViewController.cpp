@@ -5,17 +5,17 @@ ChatViewController::ChatViewController()
 
 }
 
-void ChatViewController::sendButtonClicked(string_view text)
-{
-
-}
-
 void ChatViewController::testConnect()
 {
     chat.tryConnect();
 }
 
-void ChatViewController::testRegister()
+void ChatViewController::testRegister(std::string_view name)
 {
-    chat.tryRegister("nake");
+    chat.tryRegister(name);
+}
+
+void ChatViewController::sendButtonClicked(string_view text)
+{
+    chat.sendTextMessage(text);
 }

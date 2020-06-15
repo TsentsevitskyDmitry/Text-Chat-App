@@ -2,6 +2,7 @@
 #define BASEMESSAGE_H
 
 #include <cstddef> // std::size_t
+#include "Messages/MessageType.h"
 
 class BaseMessage
 {
@@ -16,6 +17,8 @@ public:
 
     virtual void calculateSerializedSize() = 0;
     virtual void serialize() = 0;
+
+    virtual MessageType getMessageType() = 0;
     size_t getSerializedSize();
     char* getSerializedData();
 

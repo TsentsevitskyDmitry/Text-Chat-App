@@ -1,5 +1,10 @@
 #include "ChatServer.h"
 
+ChatServer::~ChatServer()
+{
+    clean();
+}
+
 bool ChatServer::bindServerSocket()
 {
     WSADATA wsaData;
@@ -77,4 +82,19 @@ SOCKET ChatServer::acceptClient()
     }
 
     return clientSocket;
+}
+
+void ChatServer::lockClients()
+{
+    mutex.lock();
+}
+
+std::unordered_map<string, ClientInfo> *ChatServer::getClients()
+{
+    return &clients;
+}
+
+void ChatServer::unlockClients()
+{
+    mutex.unlock();
 }

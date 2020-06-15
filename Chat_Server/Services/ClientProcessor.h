@@ -3,11 +3,8 @@
 
 #include <winsock2.h>
 #include <iostream>
-#include "Services/ServerSocket.h"
-#include "Messages/ServiceMessage.h"
-#include "Messages/RegisterMessage.h"
-#include "Messages/ChatMessage.h"
-#include "Messages/messagetypes.h"
+#include "Services/ChatServer.h"
+#include "Services/ClientHelper.h"
 #include "Models/ClientInfo.h"
 
 using namespace std;
@@ -16,19 +13,18 @@ using namespace std;
 class ClientProcessor
 {
 private:
-    ServerSocket socket;
     ClientInfo info;
+    string clientName;
+    ClientHelper helper;
+    ChatServer* server;
 
-    bool sendMessage(BaseMessage& message);
-    bool recvMessage(BaseMessage& message, size_t buffSize);
-    bool recvServiceMessage(ServiceMessage& message);
-
-    bool registerClient(ClientInfo& info);
-    bool releaseClient(ClientInfo& info);
-
+    bool registerClient();
+    void releaseClient();
 
 public:
-    ClientProcessor(SOCKET _socket) : socket(_socket) {}
+    ClientProcessor(ChatServer* _server, SOCKET _socket) : info(_socket), helper(_socket), server(_server) {}
+    ~ClientProcessor();
+
     void process();
 
 };
