@@ -1,8 +1,9 @@
 #include "ChatViewController.h"
 
-ChatViewController::ChatViewController()
-{
 
+void ChatViewController::disconnect()
+{
+    chat.disconnect();
 }
 
 void ChatViewController::testConnect()
@@ -18,4 +19,9 @@ void ChatViewController::testRegister(std::string_view name)
 void ChatViewController::sendButtonClicked(string_view text)
 {
     chat.sendTextMessage(text);
+}
+
+void ChatViewController::setTextMessageCallback(std::function<void(string)> callback)
+{
+    chat.setTextMessageCallback(callback);
 }

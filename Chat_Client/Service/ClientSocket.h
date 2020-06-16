@@ -23,15 +23,21 @@ using namespace std;
 class ClientSocket
 {
 private:
-    SOCKET ConnectSocket;
+    SOCKET ConnectSocket ;
+    bool connected;
 
 public:
+    ClientSocket() : connected(false) {}
     ~ClientSocket();
 
 //    void setup();
+    bool isConnected();
     bool try_connect();
     void disconnect();
+
     bool sendRaw(char* data, size_t size);
+    bool recvRaw(char** buff, size_t* size);
+    bool recvRawBytes(char** buff, size_t* size, size_t buffLen);
 
 };
 

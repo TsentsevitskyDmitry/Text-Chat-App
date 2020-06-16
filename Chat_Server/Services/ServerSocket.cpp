@@ -2,23 +2,28 @@
 
 bool ServerSocket::sendRaw(char *data, size_t size)
 {
-        // Send an initial buffer
-        int iResult = send(socket, data, static_cast<int>(size), 0);
-        if (iResult == SOCKET_ERROR) {
-            printf("send failed: %d\n", WSAGetLastError());
-            closesocket(socket);
-            clientConnected = false;
-            return false;
-        }
+    return sendRawTo(data, size, ClientSocket);
+}
 
-        printf("Bytes Sent: %ld\n", iResult);
-        return true;
+bool ServerSocket::sendRawTo(char *data, size_t size, SOCKET socket)
+{
+    // Send an initial buffer
+    int iResult = send(socket, data, static_cast<int>(size), 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed: %d\n", WSAGetLastError());
+        closesocket(socket);
+        clientConnected = false;
+        return false;
+    }
+
+    printf("Bytes Sent: %ld\n", iResult);
+    return true;
 }
 
 bool ServerSocket::recvRaw(char** buff, size_t* size)
 {
     static char recvbuff[DEFAULT_BUFLEN];
-    int iResult = recv(socket, recvbuff, DEFAULT_BUFLEN, 0);
+    int iResult = recv(ClientSocket, recvbuff, DEFAULT_BUFLEN, 0);
     if (iResult > 0) {
         printf("Bytes received: %d\n", iResult);
     }
@@ -41,7 +46,7 @@ bool ServerSocket::recvRawBytes(char **buff, size_t *size, size_t buffLen)
 ServerSocket::~ServerSocket()
 {
     // cleanup
-    closesocket(socket);
+    closesocket(ClientSocket);
 }
 
 bool ServerSocket::isClientConnected()

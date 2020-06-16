@@ -24,7 +24,7 @@ MessageType RegisterMessage::getMessageType()
     return MessageType::REGISTRATION;
 }
 
-std::string_view RegisterMessage::getName()
+std::string&  RegisterMessage::getName()
 {
     return name;
 }

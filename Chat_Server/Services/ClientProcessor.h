@@ -4,7 +4,7 @@
 #include <winsock2.h>
 #include <iostream>
 #include "Services/ChatServer.h"
-#include "Services/ClientHelper.h"
+#include "Services/SocketHelper.h"
 #include "Models/ClientInfo.h"
 
 using namespace std;
@@ -15,11 +15,12 @@ class ClientProcessor
 private:
     ClientInfo info;
     string clientName;
-    ClientHelper helper;
+    SocketHelper helper;
     ChatServer* server;
 
     bool registerClient();
     void releaseClient();
+    void broadcast(std::string& sender, ChatMessage& message);
 
 public:
     ClientProcessor(ChatServer* _server, SOCKET _socket) : info(_socket), helper(_socket), server(_server) {}

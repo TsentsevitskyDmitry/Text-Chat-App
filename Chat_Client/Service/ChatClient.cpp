@@ -1,20 +1,18 @@
 #include "ChatClient.h"
 
-bool ChatClient::send(BaseMessage &message)
+ChatClient::~ChatClient()
 {
-    message.calculateSerializedSize();
-    DataTypeMessage dtm(message.getMessageType(), message.getSerializedSize());
-    dtm.serialize();
-    if(!socket.sendRaw(dtm.getSerializedData(), message.getSerializedSize())){
-        return false;
-    }
-    message.serialize();
-    return socket.sendRaw(message.getSerializedData(), message.getSerializedSize());
+    recvThread->join();
+}
+
+void ChatClient::disconnect()
+{
+    helper.disconnect();
 }
 
 bool ChatClient::tryConnect()
 {
-    return socket.try_connect();
+    return helper.tryConnect();
 }
 
 bool ChatClient::tryRegister(std::string_view name)
@@ -24,11 +22,38 @@ bool ChatClient::tryRegister(std::string_view name)
     }
     clientName = name;
     RegisterMessage rm(name);
-    return send(rm);
+    return helper.sendMessage(rm);
 }
 
 bool ChatClient::sendTextMessage(std::string_view text)
 {
     ChatMessage cm(text);
-    return send(cm);
+    return helper.sendMessage(cm);
+}
+
+bool ChatClient::recvTextMessage(string &text)
+{
+    ChatMessage cm;
+    if(!helper.recvChatMessage(cm)){
+        return false;
+    }
+    text = cm.getData();
+    return true;
+}
+
+void ChatClient::setTextMessageCallback(std::function<void (string)> callback)
+{
+    recvCallback = callback;
+    if(recvThread)
+        return;
+
+    auto worker = [this] () {
+        while (helper.isConnected()){
+            string text;
+            if(recvTextMessage(text) || recvCallback){
+             recvCallback(text);
+            }
+        }
+    };
+    recvThread = new thread(worker);
 }

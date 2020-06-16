@@ -25,7 +25,24 @@ void ClientProcessor::process()
         }
 
         cout << clientName << ": " << cm.getData() << endl;
+        broadcast(this->clientName, cm);
+//        helper.sendMessage(cm, this->info);
+
     }
+}
+
+
+void ClientProcessor::broadcast(string &sender, ChatMessage &message)
+{
+    ChatMessage cm(sender + ": " + message.getData());
+    server->lockClients();
+    auto clients = server->getClients();
+    for(auto [name, info] : *clients){
+//        cout << info.getSocket() << " " << this->info.getSocket() << endl;
+        helper.sendMessage(cm, info);
+//        helper.sendMessage(cm, this->info);
+    }
+    server->unlockClients();
 }
 
 bool ClientProcessor::registerClient()
@@ -47,55 +64,4 @@ void ClientProcessor::releaseClient()
     auto clients = server->getClients();
     clients->erase(clientName);
     server->unlockClients();
-}
-
-
-void legacyRwEcho()
-{
-    //    cout << "hello from new thread" << endl;
-
-    //    char recvbuf[DEFAULT_BUFLEN];
-    //    int iSendResult, iResult;
-    //    int recvbuflen = DEFAULT_BUFLEN;
-
-    //    // Receive until the peer shuts down the connection
-    //    do {
-
-    //        iResult = recv(clientSocket, recvbuf, recvbuflen, 0);
-    //        if (iResult > 0) {
-    //            printf("Bytes received: %d\n", iResult);
-    //            printf("%s\n", recvbuf);
-
-    ////            // Echo the buffer back to the sender
-    ////            iSendResult = send(clientSocket, recvbuf, iResult, 0);
-    ////            if (iSendResult == SOCKET_ERROR) {
-    ////                printf("send failed: %d\n", WSAGetLastError());
-    ////                closesocket(clientSocket);
-    ////                return;
-    ////            }
-    ////            printf("Bytes sent: %d\n", iSendResult);
-
-
-
-    //        } else if (iResult == 0)
-    //            printf("Connection closing...\n");
-    //        else {
-    //            printf("recv failed: %d\n", WSAGetLastError());
-    //            closesocket(clientSocket);
-    //            return;
-    //        }
-
-    //    } while (iResult > 0);
-
-
-    //    // shutdown the connection since we're done
-    //    iResult = shutdown(clientSocket, SD_SEND);
-    //    if (iResult == SOCKET_ERROR) {
-    //        printf("shutdown failed with error: %d\n", WSAGetLastError());
-    //        closesocket(clientSocket);
-    //        return;
-    //    }
-
-    //    // cleanup
-    //    closesocket(clientSocket);
 }

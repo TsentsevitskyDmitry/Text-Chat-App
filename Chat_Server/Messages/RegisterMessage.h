@@ -19,6 +19,6 @@ public:
     void restore(char* data, size_t size);
 
     MessageType getMessageType();
-    std::string_view getName();
+    std::string&  getName();
 };
 #endif // REGISTERMESSAGE_H

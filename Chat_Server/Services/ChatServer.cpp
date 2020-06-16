@@ -89,7 +89,7 @@ void ChatServer::lockClients()
     mutex.lock();
 }
 
-std::unordered_map<string, ClientInfo> *ChatServer::getClients()
+std::unordered_map<string, ClientInfo>* ChatServer::getClients()
 {
     return &clients;
 }

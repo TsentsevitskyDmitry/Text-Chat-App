@@ -9,11 +9,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(this, &MainWindow::messageRecieved, ui->textBrowser, &QTextBrowser::append);
 }
 
 MainWindow::~MainWindow()
 {
+    controller.disconnect();
     delete ui;
+}
+
+void MainWindow::setupCallback()
+{
+    auto messageArrived = [this] (string text) {
+        cout << text << endl;
+        emit messageRecieved(QString::fromStdString(text));
+    };
+
+    controller.setTextMessageCallback(messageArrived);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -24,6 +36,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     controller.testConnect();
+    setupCallback();
 }
 
 void MainWindow::on_pushButton_3_clicked()

@@ -20,16 +20,17 @@ using namespace std;
 class ServerSocket
 {
 private:
-    SOCKET socket;
+    SOCKET ClientSocket;
     bool clientConnected;
 
 public:
-    ServerSocket(SOCKET _socket) : socket(_socket), clientConnected(true) {}
+    ServerSocket(SOCKET _socket) : ClientSocket(_socket), clientConnected(true) {}
     ~ServerSocket();
 
     bool isClientConnected();
 
     bool sendRaw(char* data, size_t size);
+    bool sendRawTo(char* data, size_t size, SOCKET socket);
     bool recvRaw(char** buff, size_t* size);
     bool recvRawBytes(char** buff, size_t* size, size_t buffLen);
 };

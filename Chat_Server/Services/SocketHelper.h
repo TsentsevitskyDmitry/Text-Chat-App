@@ -1,5 +1,5 @@
-#ifndef CLIENTHELPER_H
-#define CLIENTHELPER_H
+#ifndef SOCKETHELPER_H
+#define SOCKETHELPER_H
 
 #include "Models/ClientInfo.h"
 #include "Services/ServerSocket.h"
@@ -8,7 +8,7 @@
 #include "Messages/ChatMessage.h"
 #include "Messages/MessageType.h"
 
-class ClientHelper
+class SocketHelper
 {
 private:
     ServerSocket socket;
@@ -19,7 +19,7 @@ private:
     bool recvRegistrationMessage(BaseMessage& message);
 
 public:
-    ClientHelper(SOCKET _socket) : socket(_socket) {}
+    SocketHelper(SOCKET _socket) : socket(_socket) {}
 
     bool isClientConnected();
 
@@ -31,4 +31,4 @@ public:
 
 };
 
-#endif // CLIENTHELPER_H
+#endif // SOCKETHELPER_H

@@ -7,7 +7,7 @@
 class ChatMessage : public BaseMessage
 {
 private:
-    std::string_view messageData;
+    std::string messageData;
 
 public:
     ChatMessage(std::string_view _data) : messageData(_data) {}
