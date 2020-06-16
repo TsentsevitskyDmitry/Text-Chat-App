@@ -32,7 +32,6 @@ SOURCES += \
     Controllers/ChatViewController.cpp \
     Messages/RegisterMessage.cpp \
     Messages/BaseMessage.cpp \
-    Messages/DataTypeMessage.cpp \
     Service/SocketHelper.cpp \
     Service/ServerSocket.cpp \
     Views/mainwindow.cpp
@@ -43,7 +42,6 @@ HEADERS += \
     Controllers/ChatViewController.h \
     Messages/RegisterMessage.h \
     Messages/BaseMessage.h \
-    Messages/DataTypeMessage.h \
     Messages/MessageType.h \
     Service/SocketHelper.h \
     Service/ServerSocket.h \

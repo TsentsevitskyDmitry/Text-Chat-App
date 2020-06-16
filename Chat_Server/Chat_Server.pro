@@ -14,7 +14,6 @@ SOURCES += \
     Messages/BaseMessage.cpp \
     Messages/ChatMessage.cpp \
     Messages/RegisterMessage.cpp \
-    Messages/DataTypeMessage.cpp \
     Services/SocketHelper.cpp \
     Services/ClientSocket.cpp
 
@@ -27,7 +26,6 @@ HEADERS += \
     Messages/BaseMessage.h \
     Messages/ChatMessage.h \
     Messages/RegisterMessage.h \
-    Messages/DataTypeMessage.h \
     Messages/MessageType.h \
     Services/SocketHelper.h \
     Services/ClientSocket.h

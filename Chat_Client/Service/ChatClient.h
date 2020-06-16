@@ -6,7 +6,6 @@
 #include <functional>
 #include "Service/SocketHelper.h"
 #include "Messages/MessageType.h"
-#include "Messages/DataTypeMessage.h"
 #include "Messages/RegisterMessage.h"
 
 class ChatClient

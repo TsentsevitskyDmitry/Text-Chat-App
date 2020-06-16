@@ -2,27 +2,38 @@
 #define BASEMESSAGE_H
 
 #include <cstddef> // std::size_t
+#include <stdint.h>
 #include "Messages/MessageType.h"
+
+struct MetaData {
+    uint8_t contentType;
+    size_t contentSize;
+};
 
 class BaseMessage
 {
-protected:
-    std::size_t serializedSize;
+private:
     char* serializedData;
     void clear();
+
+protected:
+    std::size_t serializedSize;
+    virtual void _serialize(char* addr) = 0;
+    virtual void calculateSerializedSize() = 0;
 
 public:
     BaseMessage() : serializedData(nullptr) {}
     virtual ~BaseMessage();
 
-    virtual void calculateSerializedSize() = 0;
-    virtual void serialize() = 0;
-
     virtual MessageType getMessageType() = 0;
+
     size_t getSerializedSize();
     char* getSerializedData();
 
-    virtual void restore(char* data, size_t size) = 0;
+    bool isSerialized();
+    void serialize();
+
+    virtual bool restore(char* data, size_t size) = 0;
 };
 
 #endif // BASEMESSAGE_H

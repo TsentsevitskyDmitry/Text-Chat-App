@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Service/ServerSocket.h"
-#include "Messages/DataTypeMessage.h"
 #include "Messages/ChatMessage.h"
 
 MainWindow::MainWindow(QWidget *parent) :

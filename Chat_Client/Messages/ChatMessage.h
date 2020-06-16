@@ -8,6 +8,7 @@ class ChatMessage : public BaseMessage
 {
 private:
     std::string messageData;
+    void _serialize(char* addr);
 
 public:
     ChatMessage(std::string_view _data) : messageData(_data) {}
@@ -15,11 +16,10 @@ public:
     virtual ~ChatMessage() {}
 
     void calculateSerializedSize();
-    void serialize();
-    void restore(char* data, size_t size);
+    bool restore(char* data, size_t size);
 
     MessageType getMessageType();
-    std::string_view getData();
+    std::string getData();
 };
 
 #endif // CHATMESSAGE_H

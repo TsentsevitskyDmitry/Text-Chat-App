@@ -8,17 +8,17 @@ class RegisterMessage : public BaseMessage
 {
 private:
     std::string name;
+    void _serialize(char* addr);
 
 public:
-    RegisterMessage(std::string _name) : name(_name) {}
+    RegisterMessage(std::string_view _name) : name(_name) {}
     RegisterMessage() : name("") {}
     virtual ~RegisterMessage() {}
 
     void calculateSerializedSize();
-    void serialize();
-    void restore(char* data, size_t size);
+    bool restore(char* data, size_t size);
 
     MessageType getMessageType();
-    std::string&  getName();
+    std::string_view getName();
 };
 #endif // REGISTERMESSAGE_H

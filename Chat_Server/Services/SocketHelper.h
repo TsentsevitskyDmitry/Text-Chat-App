@@ -3,7 +3,7 @@
 
 #include "Models/ClientInfo.h"
 #include "Services/ClientSocket.h"
-#include "Messages/DataTypeMessage.h"
+#include "Messages/MessageType.h"
 #include "Messages/RegisterMessage.h"
 #include "Messages/ChatMessage.h"
 #include "Messages/MessageType.h"
@@ -13,9 +13,8 @@ class SocketHelper
 private:
     ClientSocket socket;
 
-    bool recvMessage(BaseMessage& message, size_t buffSize);
-    bool recvTypedMessage(BaseMessage& message, MessageType type);
-    bool recvDataTypeMessage(DataTypeMessage& message);
+    bool recvMeta(MetaData& meta);
+    bool recvMessage(BaseMessage& message, MessageType type);
     bool recvRegistrationMessage(BaseMessage& message);
 
 public:
@@ -23,11 +22,10 @@ public:
 
     bool isClientConnected();
 
-    bool sendMessage(BaseMessage& message, ClientInfo client);
+    bool sendMessage(BaseMessage& message, ClientInfo dest);
 
     bool recvRegistrationName(std::string& name);
     bool recvChatMessage(BaseMessage& message);
-
 
 };
 
