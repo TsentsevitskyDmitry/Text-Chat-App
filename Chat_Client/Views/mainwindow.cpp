@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "Service/ClientSocket.h"
-#include "Messages/DataTypeMessage.h"
+#include "Service/ServerSocket.h"
 #include "Messages/ChatMessage.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,7 +20,6 @@ MainWindow::~MainWindow()
 void MainWindow::setupCallback()
 {
     auto messageArrived = [this] (string text) {
-        cout << text << endl;
         emit messageRecieved(QString::fromStdString(text));
     };
 

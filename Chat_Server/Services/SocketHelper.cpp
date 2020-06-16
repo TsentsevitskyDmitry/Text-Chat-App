@@ -5,56 +5,32 @@ bool SocketHelper::isClientConnected()
     return socket.isClientConnected();
 }
 
-bool SocketHelper::sendMessage(BaseMessage &message, ClientInfo client)
+bool SocketHelper::sendMessage(BaseMessage &message, ClientInfo dest)
 {
-    message.calculateSerializedSize();
-    DataTypeMessage dtm(message.getMessageType(), message.getSerializedSize());
-    dtm.serialize();
-    if(!socket.sendRawTo(dtm.getSerializedData(), dtm.getSerializedSize(), client.getSocket())){
-        return false;
-    }
     message.serialize();
-    return socket.sendRawTo(message.getSerializedData(), message.getSerializedSize(), client.getSocket());
+    return socket.sendRawTo(message.getSerializedData(), message.getSerializedSize(), dest.getSocket());
 }
 
-bool SocketHelper::recvMessage(BaseMessage &message, size_t buffSize)
+bool SocketHelper::recvMeta(MetaData &meta)
 {
-    char* data = nullptr;
     size_t size;
-    bool result = socket.recvRaw(&data, &size);
-    if (result){
-        message.restore(data, size);
-    }
-    return result;
+    return socket.recvRaw(reinterpret_cast<char*>(&meta), &size, sizeof (meta));
 }
 
-bool SocketHelper::recvTypedMessage(BaseMessage &message, MessageType type)
+bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
 {
-    DataTypeMessage dtm;
-    if(!recvMessage(dtm, 0)){
+    size_t size;
+    MetaData meta;
+    if (!recvMeta(meta)){
         return false;
     }
-
-    if(!recvMessage(message, 0) || dtm.getContentType() != type){
+    char* data = new char[meta.contentSize];
+    bool success = socket.recvRaw(data, &size, meta.contentSize);
+    if (!success || meta.contentType != type){
         return false;
     }
-
+    message.restore(data, size);
     return true;
-}
-
-bool SocketHelper::recvDataTypeMessage(DataTypeMessage &message)
-{
-    return recvTypedMessage(message, MessageType::DATA_TYPE);
-}
-
-bool SocketHelper::recvRegistrationMessage(BaseMessage &message)
-{
-    return recvTypedMessage(message, MessageType::REGISTRATION);
-}
-
-bool SocketHelper::recvChatMessage(BaseMessage &message)
-{
-    return recvTypedMessage(message, MessageType::CHAT_MESSAGE);
 }
 
 bool SocketHelper::recvRegistrationName(std::string& name)
@@ -65,4 +41,14 @@ bool SocketHelper::recvRegistrationName(std::string& name)
     }
     name = rm.getName();
     return true;
+}
+
+bool SocketHelper::recvRegistrationMessage(BaseMessage &message)
+{
+    return recvMessage(message, MessageType::REGISTRATION);
+}
+
+bool SocketHelper::recvChatMessage(BaseMessage &message)
+{
+    return recvMessage(message, MessageType::CHAT_MESSAGE);
 }

@@ -1,20 +1,18 @@
 #ifndef SOCKETHELPER_H
 #define SOCKETHELPER_H
 
-#include "Service/ClientSocket.h"
-#include "Messages/DataTypeMessage.h"
+#include "Service/ServerSocket.h"
+#include "Messages/MessageType.h"
 #include "Messages/RegisterMessage.h"
 #include "Messages/ChatMessage.h"
-#include "Messages/MessageType.h"
 
 class SocketHelper
 {
 private:
-    ClientSocket socket;
+    ServerSocket socket;
 
-    bool recvMessage(BaseMessage& message, size_t buffSize);
-    bool recvTypedMessage(BaseMessage& message, MessageType type);
-    bool recvDataTypeMessage(DataTypeMessage& message);
+    bool recvMeta(MetaData& meta);
+    bool recvMessage(BaseMessage& message, MessageType type);
 
 public:
     // void setup();

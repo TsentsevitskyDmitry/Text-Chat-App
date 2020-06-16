@@ -11,24 +11,21 @@
 #include <iphlpapi.h>
 #include <iostream>
 
-#include "Messages/DataTypeMessage.h"
 #include "Messages/ChatMessage.h"
 
 using namespace std;
 
 #define DEFAULT_PORT "27015"
-#define DEFAULT_BUFLEN 1024
 
-
-class ClientSocket
+class ServerSocket
 {
 private:
-    SOCKET ConnectSocket ;
+    SOCKET connectSocket ;
     bool connected;
 
 public:
-    ClientSocket() : connected(false) {}
-    ~ClientSocket();
+    ServerSocket() : connected(false) {}
+    ~ServerSocket();
 
 //    void setup();
     bool isConnected();
@@ -36,8 +33,7 @@ public:
     void disconnect();
 
     bool sendRaw(char* data, size_t size);
-    bool recvRaw(char** buff, size_t* size);
-    bool recvRawBytes(char** buff, size_t* size, size_t buffLen);
+    bool recvRaw(char* buff, size_t* size, size_t buffSize);
 
 };
 

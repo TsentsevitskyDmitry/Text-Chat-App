@@ -27,30 +27,28 @@ LIBS += -lws2_32
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    Service/ClientSocket.cpp \
     Messages/ChatMessage.cpp \
     Service/ChatClient.cpp \
     Controllers/ChatViewController.cpp \
     Messages/RegisterMessage.cpp \
     Messages/BaseMessage.cpp \
-    Messages/DataTypeMessage.cpp \
-    Service/SocketHelper.cpp
+    Service/SocketHelper.cpp \
+    Service/ServerSocket.cpp \
+    Views/mainwindow.cpp
 
 HEADERS += \
-        mainwindow.h \
-    Service/ClientSocket.h \
     Messages/ChatMessage.h \
     Service/ChatClient.h \
     Controllers/ChatViewController.h \
     Messages/RegisterMessage.h \
     Messages/BaseMessage.h \
-    Messages/DataTypeMessage.h \
     Messages/MessageType.h \
-    Service/SocketHelper.h
+    Service/SocketHelper.h \
+    Service/ServerSocket.h \
+    Views/mainwindow.h
 
 FORMS += \
-        mainwindow.ui
+    Views/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

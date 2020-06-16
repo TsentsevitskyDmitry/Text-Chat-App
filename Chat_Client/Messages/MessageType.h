@@ -3,7 +3,6 @@
 
 enum MessageType
 {
-    DATA_TYPE,
     CHAT_MESSAGE,
     REGISTRATION
 };

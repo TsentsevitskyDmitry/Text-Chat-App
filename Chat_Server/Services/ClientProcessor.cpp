@@ -9,11 +9,11 @@ ClientProcessor::~ClientProcessor()
 void ClientProcessor::process()
 {
     if(!registerClient()){
-        cout << "user already exist" << endl;
+        cout << "Registration failed" << endl;
         return;
     }
     else{
-        cout << "done!!!" << endl;
+        cout << "User '" << this->clientName << "' connected!" << endl;
     }
 
 
@@ -26,21 +26,16 @@ void ClientProcessor::process()
 
         cout << clientName << ": " << cm.getData() << endl;
         broadcast(this->clientName, cm);
-//        helper.sendMessage(cm, this->info);
-
     }
 }
-
 
 void ClientProcessor::broadcast(string &sender, ChatMessage &message)
 {
     ChatMessage cm(sender + ": " + message.getData());
     server->lockClients();
     auto clients = server->getClients();
-    for(auto [name, info] : *clients){
-//        cout << info.getSocket() << " " << this->info.getSocket() << endl;
+    for(auto& [name, info] : *clients){
         helper.sendMessage(cm, info);
-//        helper.sendMessage(cm, this->info);
     }
     server->unlockClients();
 }

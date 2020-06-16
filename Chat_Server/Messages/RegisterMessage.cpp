@@ -6,17 +6,15 @@ void RegisterMessage::calculateSerializedSize()
     serializedSize = name.length();
 }
 
-void RegisterMessage::serialize()
+void RegisterMessage::_serialize(char *addr)
 {
-    clear();
-    calculateSerializedSize();
-    serializedData = new char[serializedSize];
-    memcpy(serializedData, name.c_str(), name.length());
+    memcpy(addr, name.c_str(), name.length());
 }
 
-void RegisterMessage::restore(char *data, size_t size)
+bool RegisterMessage::restore(char *data, size_t size)
 {
     name = std::string(data, size);
+    return true;
 }
 
 MessageType RegisterMessage::getMessageType()
@@ -24,7 +22,7 @@ MessageType RegisterMessage::getMessageType()
     return MessageType::REGISTRATION;
 }
 
-std::string&  RegisterMessage::getName()
+std::string_view RegisterMessage::getName()
 {
     return name;
 }

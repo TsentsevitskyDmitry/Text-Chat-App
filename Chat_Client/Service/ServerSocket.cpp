@@ -1,23 +1,23 @@
-#include "ClientSocket.h"
+#include "ServerSocket.h"
 
-ClientSocket::~ClientSocket()
+ServerSocket::~ServerSocket()
 {
     disconnect();
 }
 
-bool ClientSocket::isConnected()
+bool ServerSocket::isConnected()
 {
     return connected;
 }
 
-void ClientSocket::disconnect()
+void ServerSocket::disconnect()
 {
     // cleanup
-    closesocket(ConnectSocket);
+    closesocket(connectSocket);
     WSACleanup();
 }
 
-bool ClientSocket::try_connect()
+bool ServerSocket::try_connect()
 {
     disconnect();
 
@@ -47,13 +47,13 @@ bool ClientSocket::try_connect()
         return false;
     }
 
-    ConnectSocket  = INVALID_SOCKET;
+    connectSocket  = INVALID_SOCKET;
     ptr=result;
 
-    ConnectSocket  = socket(ptr->ai_family, ptr->ai_socktype,
+    connectSocket  = socket(ptr->ai_family, ptr->ai_socktype,
         ptr->ai_protocol);
 
-    if (ConnectSocket  == INVALID_SOCKET) {
+    if (connectSocket  == INVALID_SOCKET) {
         printf("Error at socket(): %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         connected = false;
@@ -61,16 +61,16 @@ bool ClientSocket::try_connect()
     }
 
     // Connect to server.
-    iResult = connect( ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+    iResult = connect( connectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
     if (iResult == SOCKET_ERROR) {
-        closesocket(ConnectSocket );
-        ConnectSocket = INVALID_SOCKET;
+        closesocket(connectSocket );
+        connectSocket = INVALID_SOCKET;
         connected = false;
     }
 
     freeaddrinfo(result);
 
-    if (ConnectSocket  == INVALID_SOCKET) {
+    if (connectSocket  == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         connected = false;
         return false;
@@ -80,13 +80,13 @@ bool ClientSocket::try_connect()
     return true;
 }
 
-bool ClientSocket::sendRaw(char *data, size_t size)
+bool ServerSocket::sendRaw(char *data, size_t size)
 {
         // Send an initial buffer
-        int iResult = send(ConnectSocket, data, static_cast<int>(size), 0);
+        int iResult = send(connectSocket, data, static_cast<int>(size), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed: %d\n", WSAGetLastError());
-            closesocket(ConnectSocket);
+            closesocket(connectSocket);
             connected = false;
             return false;
         }
@@ -95,10 +95,9 @@ bool ClientSocket::sendRaw(char *data, size_t size)
         return true;
 }
 
-bool ClientSocket::recvRaw(char** buff, size_t* size)
+bool ServerSocket::recvRaw(char *buff, size_t *size, size_t buffSize)
 {
-    static char recvbuff[DEFAULT_BUFLEN];
-    int iResult = recv(ConnectSocket, recvbuff, DEFAULT_BUFLEN, 0);
+    int iResult = recv(connectSocket, buff, static_cast<int>(buffSize), 0);
     if (iResult > 0) {
         printf("Bytes received: %d\n", iResult);
     }
@@ -107,13 +106,6 @@ bool ClientSocket::recvRaw(char** buff, size_t* size)
         connected = false;
         return false;
     }
-    *buff = recvbuff;
     *size = static_cast<size_t>(iResult);
     return true;
-}
-
-bool ClientSocket::recvRawBytes(char **buff, size_t *size, size_t buffLen)
-{
-    // TODO: if data more then IP packet
-    recvRaw(buff, size);
 }

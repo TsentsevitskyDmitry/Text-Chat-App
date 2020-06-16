@@ -6,18 +6,15 @@ void ChatMessage::calculateSerializedSize()
     serializedSize = messageData.length();
 }
 
-void ChatMessage::serialize()
+void ChatMessage::_serialize(char *addr)
 {
-    clear();
-    calculateSerializedSize();
-    serializedData = new char[serializedSize];
-    memcpy(serializedData, messageData.data(), messageData.length());
+    memcpy(addr, messageData.data(), messageData.length());
 }
 
-void ChatMessage::restore(char *data, size_t size)
+bool ChatMessage::restore(char *data, size_t size)
 {
     messageData = std::string(data, size);
-
+    return messageData.length();
 }
 
 MessageType ChatMessage::getMessageType()

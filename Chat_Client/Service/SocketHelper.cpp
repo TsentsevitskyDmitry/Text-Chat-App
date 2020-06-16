@@ -17,47 +17,33 @@ bool SocketHelper::tryConnect()
 
 bool SocketHelper::sendMessage(BaseMessage &message)
 {
-    message.calculateSerializedSize();
-    DataTypeMessage dtm(message.getMessageType(), message.getSerializedSize());
-    dtm.serialize();
-    if(!socket.sendRaw(dtm.getSerializedData(), dtm.getSerializedSize())){
-        return false;
-    }
     message.serialize();
     return socket.sendRaw(message.getSerializedData(), message.getSerializedSize());
 }
 
-bool SocketHelper::recvMessage(BaseMessage &message, size_t buffSize)
+bool SocketHelper::recvMeta(MetaData &meta)
 {
-    char* data = nullptr;
     size_t size;
-    bool result = socket.recvRaw(&data, &size);
-    if (result){
-        message.restore(data, size);
-    }
-    return result;
+    return socket.recvRaw(reinterpret_cast<char*>(&meta), &size, sizeof (meta));
 }
 
-bool SocketHelper::recvTypedMessage(BaseMessage &message, MessageType type)
+bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
 {
-    DataTypeMessage dtm;
-    if(!recvMessage(dtm, 0)){
+    size_t size;
+    MetaData meta;
+    if (!recvMeta(meta)){
         return false;
     }
-
-    if(!recvMessage(message, 0) || dtm.getContentType() != type){
+    char* data = new char[meta.contentSize];
+    bool success = socket.recvRaw(data, &size, meta.contentSize);
+    if (!success || meta.contentType != type){
         return false;
     }
-
+    message.restore(data, size);
     return true;
-}
-
-bool SocketHelper::recvDataTypeMessage(DataTypeMessage &message)
-{
-    return recvTypedMessage(message, MessageType::DATA_TYPE);
 }
 
 bool SocketHelper::recvChatMessage(BaseMessage &message)
 {
-    return recvTypedMessage(message, MessageType::CHAT_MESSAGE);
+    return recvMessage(message, MessageType::CHAT_MESSAGE);
 }

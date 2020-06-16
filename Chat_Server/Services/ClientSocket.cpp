@@ -1,11 +1,11 @@
-#include "ServerSocket.h"
+#include "ClientSocket.h"
 
-bool ServerSocket::sendRaw(char *data, size_t size)
+bool ClientSocket::sendRaw(char *data, size_t size)
 {
-    return sendRawTo(data, size, ClientSocket);
+    return sendRawTo(data, size, clientSocket);
 }
 
-bool ServerSocket::sendRawTo(char *data, size_t size, SOCKET socket)
+bool ClientSocket::sendRawTo(char *data, size_t size, SOCKET socket)
 {
     // Send an initial buffer
     int iResult = send(socket, data, static_cast<int>(size), 0);
@@ -20,10 +20,9 @@ bool ServerSocket::sendRawTo(char *data, size_t size, SOCKET socket)
     return true;
 }
 
-bool ServerSocket::recvRaw(char** buff, size_t* size)
+bool ClientSocket::recvRaw(char* buff, size_t* size, size_t buffLen)
 {
-    static char recvbuff[DEFAULT_BUFLEN];
-    int iResult = recv(ClientSocket, recvbuff, DEFAULT_BUFLEN, 0);
+    int iResult = recv(clientSocket, buff, static_cast<int>(buffLen), 0);
     if (iResult > 0) {
         printf("Bytes received: %d\n", iResult);
     }
@@ -32,24 +31,18 @@ bool ServerSocket::recvRaw(char** buff, size_t* size)
         clientConnected = false;
         return false;
     }
-    *buff = recvbuff;
     *size = static_cast<size_t>(iResult);
     return true;
 }
 
-bool ServerSocket::recvRawBytes(char **buff, size_t *size, size_t buffLen)
-{
-    // TODO: if data more then IP packet
-    recvRaw(buff, size);
-}
 
-ServerSocket::~ServerSocket()
+ClientSocket::~ClientSocket()
 {
     // cleanup
-    closesocket(ClientSocket);
+    closesocket(clientSocket);
 }
 
-bool ServerSocket::isClientConnected()
+bool ClientSocket::isClientConnected()
 {
     return clientConnected;
 }
