@@ -2,7 +2,7 @@
 #define SOCKETHELPER_H
 
 #include "Models/ClientInfo.h"
-#include "Services/ServerSocket.h"
+#include "Services/ClientSocket.h"
 #include "Messages/DataTypeMessage.h"
 #include "Messages/RegisterMessage.h"
 #include "Messages/ChatMessage.h"
@@ -11,7 +11,7 @@
 class SocketHelper
 {
 private:
-    ServerSocket socket;
+    ClientSocket socket;
 
     bool recvMessage(BaseMessage& message, size_t buffSize);
     bool recvTypedMessage(BaseMessage& message, MessageType type);

@@ -1,7 +1,7 @@
 #ifndef SOCKETHELPER_H
 #define SOCKETHELPER_H
 
-#include "Service/ClientSocket.h"
+#include "Service/ServerSocket.h"
 #include "Messages/DataTypeMessage.h"
 #include "Messages/RegisterMessage.h"
 #include "Messages/ChatMessage.h"
@@ -10,7 +10,7 @@
 class SocketHelper
 {
 private:
-    ClientSocket socket;
+    ServerSocket socket;
 
     bool recvMessage(BaseMessage& message, size_t buffSize);
     bool recvTypedMessage(BaseMessage& message, MessageType type);

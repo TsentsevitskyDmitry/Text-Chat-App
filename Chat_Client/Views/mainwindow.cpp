@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "Service/ClientSocket.h"
+#include "Service/ServerSocket.h"
 #include "Messages/DataTypeMessage.h"
 #include "Messages/ChatMessage.h"
 
@@ -21,7 +21,6 @@ MainWindow::~MainWindow()
 void MainWindow::setupCallback()
 {
     auto messageArrived = [this] (string text) {
-        cout << text << endl;
         emit messageRecieved(QString::fromStdString(text));
     };
 

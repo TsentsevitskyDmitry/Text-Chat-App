@@ -20,15 +20,15 @@ using namespace std;
 #define DEFAULT_BUFLEN 1024
 
 
-class ClientSocket
+class ServerSocket
 {
 private:
-    SOCKET ConnectSocket ;
+    SOCKET connectSocket ;
     bool connected;
 
 public:
-    ClientSocket() : connected(false) {}
-    ~ClientSocket();
+    ServerSocket() : connected(false) {}
+    ~ServerSocket();
 
 //    void setup();
     bool isConnected();

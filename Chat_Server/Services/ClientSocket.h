@@ -17,15 +17,15 @@ using namespace std;
 
 #define DEFAULT_BUFLEN 1024
 
-class ServerSocket
+class ClientSocket
 {
 private:
-    SOCKET ClientSocket;
+    SOCKET clientSocket;
     bool clientConnected;
 
 public:
-    ServerSocket(SOCKET _socket) : ClientSocket(_socket), clientConnected(true) {}
-    ~ServerSocket();
+    ClientSocket(SOCKET _socket) : clientSocket(_socket), clientConnected(true) {}
+    ~ClientSocket();
 
     bool isClientConnected();
 
