@@ -1,5 +1,5 @@
 #include "Messages/RegisterMessage.h"
-#include "Messages/MessageType.h"
+#include "Messages/MessageTypes.h"
 
 void RegisterMessage::calculateSerializedSize()
 {
@@ -19,7 +19,7 @@ bool RegisterMessage::restore(char *data, size_t size)
 
 MessageType RegisterMessage::getMessageType()
 {
-    return MessageType::REGISTRATION;
+    return MessageType::REGISTRATION_MESSAGE;
 }
 
 std::string_view RegisterMessage::getName()

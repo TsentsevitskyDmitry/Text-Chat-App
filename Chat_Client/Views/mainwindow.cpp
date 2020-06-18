@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(this, &MainWindow::messageRecieved, ui->textBrowser, &QTextBrowser::append);
+    connect(this, &MainWindow::errorRecieved, ui->textBrowser, &QTextBrowser::append);
 }
 
 MainWindow::~MainWindow()
@@ -19,11 +20,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupCallback()
 {
-    auto messageArrived = [this] (string text) {
+    auto message = [this] (string text) {
         emit messageRecieved(QString::fromStdString(text));
     };
+    auto error = [this] (string text) {
+        emit errorRecieved(QString::fromStdString(text));
+    };
 
-    controller.setTextMessageCallback(messageArrived);
+    controller.setTextMessageCallback(message);
+    controller.setErrorMessageCallback(error);
 }
 
 void MainWindow::on_pushButton_clicked()

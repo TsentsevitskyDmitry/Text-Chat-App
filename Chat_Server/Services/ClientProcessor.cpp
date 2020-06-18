@@ -1,32 +1,40 @@
 #include "ClientProcessor.h"
 
 
-ClientProcessor::~ClientProcessor()
-{
-    releaseClient();
-}
-
 void ClientProcessor::process()
 {
-    if(!registerClient()){
-        cout << "Registration failed" << endl;
+    if(!tyrRegister()){
         return;
     }
-    else{
-        cout << "User '" << this->clientName << "' connected!" << endl;
-    }
 
-
-    while(helper.isClientConnected())
+    ChatMessage cm;
+    while(helper.isClientConnected() && helper.recvChatMessage(cm))
     {
-        ChatMessage cm;
-        if(!helper.recvChatMessage(cm)){
-            return;
-        }
-
         cout << clientName << ": " << cm.getData() << endl;
         broadcast(this->clientName, cm);
     }
+
+    // Client disconected
+    releaseClient();
+}
+
+bool ClientProcessor::tyrRegister()
+{
+    ErrorMessage error;
+    if(!registerClient()){
+        cout << "Registration failed" << endl;
+        error.setError(ErrorType::NAME_ALREADY_USED_ERROR);
+    }
+    else{
+        cout << "User '" << this->clientName << "' connected!" << endl;
+        error.setError(ErrorType::NO_ERROR_ERROR);
+    }
+    helper.sendMessage(error, this->info);
+    if(error.getError() == ErrorType::NAME_ALREADY_USED_ERROR){
+        helper.disconnect();
+        return false;
+    }
+    return true;
 }
 
 void ClientProcessor::broadcast(string &sender, ChatMessage &message)

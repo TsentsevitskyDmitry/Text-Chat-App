@@ -17,7 +17,7 @@ void ServerSocket::disconnect()
     WSACleanup();
 }
 
-bool ServerSocket::try_connect()
+bool ServerSocket::tryConnect()
 {
     disconnect();
 
@@ -31,8 +31,8 @@ bool ServerSocket::try_connect()
         return false;
     }
 
-    struct addrinfo *result = NULL,
-                    *ptr = NULL,
+    struct addrinfo *result = nullptr,
+                    *ptr = nullptr,
                     hints;
 
     ZeroMemory( &hints, sizeof(hints) );
@@ -61,7 +61,7 @@ bool ServerSocket::try_connect()
     }
 
     // Connect to server.
-    iResult = connect( connectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+    iResult = connect( connectSocket, ptr->ai_addr, static_cast<int>(ptr->ai_addrlen));
     if (iResult == SOCKET_ERROR) {
         closesocket(connectSocket );
         connectSocket = INVALID_SOCKET;
@@ -108,4 +108,9 @@ bool ServerSocket::recvRaw(char *buff, size_t *size, size_t buffSize)
     }
     *size = static_cast<size_t>(iResult);
     return true;
+}
+
+int ServerSocket::getLastErrorCode()
+{
+    return  WSAGetLastError();
 }

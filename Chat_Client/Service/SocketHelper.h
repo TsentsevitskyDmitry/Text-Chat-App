@@ -2,9 +2,10 @@
 #define SOCKETHELPER_H
 
 #include "Service/ServerSocket.h"
-#include "Messages/MessageType.h"
-#include "Messages/RegisterMessage.h"
+#include "Messages/MessageTypes.h"
 #include "Messages/ChatMessage.h"
+#include "Messages/ErrorMessage.h"
+#include "Messages/RegisterMessage.h"
 
 class SocketHelper
 {
@@ -21,9 +22,10 @@ public:
     bool isConnected();
 
     bool sendMessage(BaseMessage& message);
-    bool recvChatMessage(BaseMessage& message);
+    bool recvChatMessage(ChatMessage& message);
+    bool recvErrorMessage(ErrorMessage& message);
 
-
+    static int getSocketErrorCode();
 };
 
 #endif // SOCKETHELPER_H

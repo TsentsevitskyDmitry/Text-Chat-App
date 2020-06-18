@@ -3,10 +3,11 @@
 
 #include "Models/ClientInfo.h"
 #include "Services/ClientSocket.h"
-#include "Messages/MessageType.h"
+#include "Messages/MessageTypes.h"
+#include "Messages/ErrorMessage.h"
 #include "Messages/RegisterMessage.h"
 #include "Messages/ChatMessage.h"
-#include "Messages/MessageType.h"
+#include "Messages/MessageTypes.h"
 
 class SocketHelper
 {
@@ -21,6 +22,7 @@ public:
     SocketHelper(SOCKET _socket) : socket(_socket) {}
 
     bool isClientConnected();
+    void disconnect();
 
     bool sendMessage(BaseMessage& message, ClientInfo dest);
 

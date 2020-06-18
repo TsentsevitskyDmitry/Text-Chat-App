@@ -1,5 +1,5 @@
 #include "ChatMessage.h"
-#include "Messages/MessageType.h"
+#include "Messages/MessageTypes.h"
 
 void ChatMessage::calculateSerializedSize()
 {

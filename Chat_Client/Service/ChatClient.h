@@ -5,7 +5,7 @@
 #include <thread>
 #include <functional>
 #include "Service/SocketHelper.h"
-#include "Messages/MessageType.h"
+#include "Messages/MessageTypes.h"
 #include "Messages/RegisterMessage.h"
 
 class ChatClient
@@ -15,14 +15,16 @@ private:
     std::string clientName;
     std::thread* recvThread;
     std::function<void (string)> recvCallback;
+    bool registered;
 
 public:
-    ChatClient() : recvThread(nullptr) {}
+    ChatClient() : recvThread(nullptr), registered(false) {}
     ~ChatClient();
 
     void disconnect();
     bool tryConnect();
-    bool tryRegister(std::string_view name);
+    bool isRegistered();
+    ErrorType tryRegister(std::string_view name);
 
     bool sendTextMessage(std::string_view text);
 

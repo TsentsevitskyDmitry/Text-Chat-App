@@ -5,7 +5,12 @@ bool SocketHelper::isClientConnected()
     return socket.isClientConnected();
 }
 
-bool SocketHelper::sendMessage(BaseMessage &message, ClientInfo dest)
+void SocketHelper::disconnect()
+{
+    socket.disconnect();
+}
+
+bool SocketHelper::sendMessage(BaseMessage& message, ClientInfo dest)
 {
     message.serialize();
     return socket.sendRawTo(message.getSerializedData(), message.getSerializedSize(), dest.getSocket());
@@ -45,7 +50,7 @@ bool SocketHelper::recvRegistrationName(std::string& name)
 
 bool SocketHelper::recvRegistrationMessage(BaseMessage &message)
 {
-    return recvMessage(message, MessageType::REGISTRATION);
+    return recvMessage(message, MessageType::REGISTRATION_MESSAGE);
 }
 
 bool SocketHelper::recvChatMessage(BaseMessage &message)

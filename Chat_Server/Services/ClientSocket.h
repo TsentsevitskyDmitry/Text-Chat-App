@@ -27,6 +27,7 @@ public:
     ~ClientSocket();
 
     bool isClientConnected();
+    void disconnect();
 
     bool sendRaw(char* data, size_t size);
     bool sendRawTo(char* data, size_t size, SOCKET socket);

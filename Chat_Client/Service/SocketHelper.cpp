@@ -1,4 +1,4 @@
-#include "SocketHelper.h"
+#include "Service/SocketHelper.h"
 
 bool SocketHelper::isConnected()
 {
@@ -12,7 +12,7 @@ void SocketHelper::disconnect()
 
 bool SocketHelper::tryConnect()
 {
-    return socket.try_connect();
+    return socket.tryConnect();
 }
 
 bool SocketHelper::sendMessage(BaseMessage &message)
@@ -43,7 +43,18 @@ bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
     return true;
 }
 
-bool SocketHelper::recvChatMessage(BaseMessage &message)
+bool SocketHelper::recvChatMessage(ChatMessage &message)
 {
     return recvMessage(message, MessageType::CHAT_MESSAGE);
+}
+
+bool SocketHelper::recvErrorMessage(ErrorMessage &message)
+{
+    message.setError(ErrorType::SOCKETS_ERROR);
+    return recvMessage(message, MessageType::ERROR_MESSAGE);
+}
+
+int SocketHelper::getSocketErrorCode()
+{
+    return ServerSocket::getLastErrorCode();
 }
