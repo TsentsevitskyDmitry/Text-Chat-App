@@ -56,7 +56,7 @@ bool ChatClient::recvTextMessage(string &text)
 
 void ChatClient::setTextMessageCallback(std::function<void (string)> callback)
 {
-    recvCallback = callback;
+    recvCallbackFunction = callback;
     if(recvThread)
         return;
 
@@ -66,8 +66,9 @@ void ChatClient::setTextMessageCallback(std::function<void (string)> callback)
         }
         while (helper.isConnected()){
             string text;
-            if(recvTextMessage(text) || recvCallback){
-             recvCallback(text);
+            if(recvTextMessage(text) && recvCallbackFunction){
+                cout << "got: " << text << endl;
+                recvCallbackFunction(text);
             }
         }
     };

@@ -10,6 +10,7 @@ class ChatViewController
 private:
     ChatClient chat;
     std::function<void(string)> errorMessageCallback;
+    void reportError(std::string_view error);
 
 public:
     void disconnect();

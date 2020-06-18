@@ -14,7 +14,7 @@ private:
     SocketHelper helper;
     std::string clientName;
     std::thread* recvThread;
-    std::function<void (string)> recvCallback;
+    std::function<void (string)> recvCallbackFunction;
     bool registered;
 
 public:
