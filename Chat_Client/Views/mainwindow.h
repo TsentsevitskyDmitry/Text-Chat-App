@@ -27,6 +27,7 @@ private slots:
 
 signals:
     void messageRecieved(QString message);
+    void errorRecieved(QString message);
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);

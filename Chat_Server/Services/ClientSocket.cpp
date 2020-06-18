@@ -38,11 +38,17 @@ bool ClientSocket::recvRaw(char* buff, size_t* size, size_t buffLen)
 
 ClientSocket::~ClientSocket()
 {
-    // cleanup
-    closesocket(clientSocket);
+    disconnect();
 }
 
 bool ClientSocket::isClientConnected()
 {
     return clientConnected;
+}
+
+void ClientSocket::disconnect()
+{
+    // cleanup
+    clientConnected = false;
+    closesocket(clientSocket);
 }

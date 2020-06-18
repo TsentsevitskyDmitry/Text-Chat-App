@@ -3,7 +3,7 @@
 
 #include <cstddef> // std::size_t
 #include <stdint.h>
-#include "Messages/MessageType.h"
+#include "Messages/MessageTypes.h"
 
 struct MetaData {
     uint8_t contentType;

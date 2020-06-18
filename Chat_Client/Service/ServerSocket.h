@@ -29,12 +29,13 @@ public:
 
 //    void setup();
     bool isConnected();
-    bool try_connect();
+    bool tryConnect();
     void disconnect();
 
     bool sendRaw(char* data, size_t size);
     bool recvRaw(char* buff, size_t* size, size_t buffSize);
 
+    static int getLastErrorCode();
 };
 
 #endif // CLIENTSOCHET_H
