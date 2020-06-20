@@ -33,11 +33,18 @@ void MainWindow::setupCallback()
     controller.setErrorMessageCallback(error);
 }
 
+void MainWindow::setTitle(QString text)
+{
+    this->setWindowTitle(text);
+}
+
 void MainWindow::on_connectionButton_clicked()
 {
     dialog.exec();
+    setTitle("Connecting...");
     controller.tryConnect();
-    controller.tryRegister();
+    QString result = controller.tryRegister() ? "Connected" : "Error";
+    setTitle(result);
 }
 
 void MainWindow::on_sendButton_clicked()

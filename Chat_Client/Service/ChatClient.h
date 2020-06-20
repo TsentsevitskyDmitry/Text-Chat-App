@@ -15,6 +15,7 @@ private:
     ConnectionSettings settings;
     std::thread* recvThread;
     std::function<void (string)> recvCallbackFunction;
+    std::function<void (string)> errorCallbackFunction;
     bool registered;
 
     void startRecv();
@@ -34,6 +35,7 @@ public:
 
     bool recvTextMessage(std::string& text);
     void setTextMessageCallback(std::function<void(string)> callback);
+    void setErrorMessageCallback(std::function<void(string)> callback);
 
     std::string getClientName();
 };

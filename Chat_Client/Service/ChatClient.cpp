@@ -64,11 +64,14 @@ void ChatClient::startRecv()
 
 
     auto worker = [this] () {
-        while (isRegistered()){
+        while (isRegistered() && helper.isConnected()){
             string text;
             if(recvTextMessage(text) && recvCallbackFunction){
                 cout << "got: " << text << endl;
                 recvCallbackFunction(text);
+            }
+            else if (errorCallbackFunction){
+                errorCallbackFunction("Server error.");
             }
         }
     };
@@ -94,6 +97,11 @@ bool ChatClient::recvTextMessage(string &text)
 void ChatClient::setTextMessageCallback(std::function<void (string)> callback)
 {
     recvCallbackFunction = callback;
+}
+
+void ChatClient::setErrorMessageCallback(std::function<void (string)> callback)
+{
+    errorCallbackFunction = callback;
 }
 
 string ChatClient::getClientName()

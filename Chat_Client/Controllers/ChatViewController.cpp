@@ -10,16 +10,17 @@ void ChatViewController::disconnect()
     chat.disconnect();
 }
 
-void ChatViewController::tryConnect()
+bool ChatViewController::tryConnect()
 {
-    chat.tryConnect();
+    return chat.tryConnect();
 }
 
-void ChatViewController::tryRegister()
+bool ChatViewController::tryRegister()
 {
     ErrorType error =  chat.tryRegister();
     auto [result, description] = ErrorHelper::parseRegistrationError(error, chat.getClientName());
     reportError(description);
+    return result;
 }
 
 void ChatViewController::reportError(string_view error)
@@ -45,4 +46,5 @@ void ChatViewController::setTextMessageCallback(std::function<void(string)> call
 void ChatViewController::setErrorMessageCallback(std::function<void (string)> callback)
 {
     errorMessageCallback = callback;
+    chat.setErrorMessageCallback(callback);
 }

@@ -16,8 +16,8 @@ public:
     ChatClient* getChat();
 
     void disconnect();
-    void tryConnect();
-    void tryRegister();
+    bool tryConnect();
+    bool tryRegister();
     void sendButtonClicked(std::string_view text);
 
     void setTextMessageCallback(std::function<void(string)> callback);

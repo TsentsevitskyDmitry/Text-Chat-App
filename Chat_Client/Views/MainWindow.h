@@ -18,6 +18,7 @@ private:
     ChatViewController controller;
     ConnectDialog dialog;
     void setupCallback();
+    void setTitle(QString text);
 
 private slots:
     void on_sendButton_clicked();
