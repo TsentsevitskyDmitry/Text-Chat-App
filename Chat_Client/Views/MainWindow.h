@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "Controllers/ChatViewController.h"
-
+#include "Views/ConnectDialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,14 +16,13 @@ class MainWindow : public QMainWindow
 private:
     Ui::MainWindow *ui;
     ChatViewController controller;
+    ConnectDialog dialog;
     void setupCallback();
+    void setTitle(QString text);
 
 private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
+    void on_sendButton_clicked();
+    void on_connectionButton_clicked();
 
 signals:
     void messageRecieved(QString message);

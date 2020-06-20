@@ -34,9 +34,12 @@ SOURCES += \
     Messages/BaseMessage.cpp \
     Service/SocketHelper.cpp \
     Service/ServerSocket.cpp \
-    Views/mainwindow.cpp \
     Messages/ErrorMessage.cpp \
-    Service/ErrorHelper.cpp
+    Service/ErrorHelper.cpp \
+    Views/MainWindow.cpp \
+    Views/ConnectDialog.cpp \
+    Models/ConnectionSettings.cpp \
+    Controllers/ConnectDialogController.cpp
 
 HEADERS += \
     Messages/ChatMessage.h \
@@ -46,13 +49,17 @@ HEADERS += \
     Messages/BaseMessage.h \
     Service/SocketHelper.h \
     Service/ServerSocket.h \
-    Views/mainwindow.h \
     Messages/MessageTypes.h \
     Messages/ErrorMessage.h \
-    Service/ErrorHelper.h
+    Service/ErrorHelper.h \
+    Views/MainWindow.h \
+    Views/ConnectDialog.h \
+    Models/ConnectionSettings.h \
+    Controllers/ConnectDialogController.h
 
 FORMS += \
-    Views/mainwindow.ui
+    Views/mainwindow.ui \
+    Views/connectdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

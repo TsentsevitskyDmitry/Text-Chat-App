@@ -12,24 +12,32 @@ class ChatClient
 {
 private:
     SocketHelper helper;
-    std::string clientName;
+    ConnectionSettings settings;
     std::thread* recvThread;
     std::function<void (string)> recvCallbackFunction;
+    std::function<void (string)> errorCallbackFunction;
     bool registered;
+
+    void startRecv();
 
 public:
     ChatClient() : recvThread(nullptr), registered(false) {}
     ~ChatClient();
 
+    void setup(ConnectionSettings settings);
     void disconnect();
     bool tryConnect();
+    bool isConnected();
     bool isRegistered();
-    ErrorType tryRegister(std::string_view name);
+    ErrorType tryRegister();
 
     bool sendTextMessage(std::string_view text);
 
     bool recvTextMessage(std::string& text);
     void setTextMessageCallback(std::function<void(string)> callback);
+    void setErrorMessageCallback(std::function<void(string)> callback);
+
+    std::string getClientName();
 };
 
 #endif // CHATCLIENT_H

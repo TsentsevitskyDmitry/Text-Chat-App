@@ -10,16 +10,15 @@
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 #include <iostream>
-
-#include "Messages/ChatMessage.h"
-
+#include <string>
+#include "Models/ConnectionSettings.h"
 using namespace std;
-
-#define DEFAULT_PORT "27015"
 
 class ServerSocket
 {
 private:
+    std::string ip;
+    std::string port;
     SOCKET connectSocket ;
     bool connected;
 
@@ -27,7 +26,7 @@ public:
     ServerSocket() : connected(false) {}
     ~ServerSocket();
 
-//    void setup();
+    void setup(ConnectionSettings& settings);
     bool isConnected();
     bool tryConnect();
     void disconnect();

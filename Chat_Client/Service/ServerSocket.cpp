@@ -5,6 +5,12 @@ ServerSocket::~ServerSocket()
     disconnect();
 }
 
+void ServerSocket::setup(ConnectionSettings& settings)
+{
+    ip = settings.getIp();
+    port = settings.getPort();
+}
+
 bool ServerSocket::isConnected()
 {
     return connected;
@@ -40,7 +46,7 @@ bool ServerSocket::tryConnect()
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
-    iResult = getaddrinfo("127.0.0.1", DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(this->ip.c_str(), this->port.c_str(), &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed: %d\n", iResult);
         connected = false;

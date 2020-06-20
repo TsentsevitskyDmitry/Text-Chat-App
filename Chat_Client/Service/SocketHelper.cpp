@@ -1,5 +1,11 @@
 #include "Service/SocketHelper.h"
 
+
+void SocketHelper::setup(ConnectionSettings& settings)
+{
+    socket.setup(settings);
+}
+
 bool SocketHelper::isConnected()
 {
     return socket.isConnected();

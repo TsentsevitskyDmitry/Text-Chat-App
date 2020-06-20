@@ -1,14 +1,26 @@
 #include "ChatViewController.h"
 
+ChatClient *ChatViewController::getChat()
+{
+    return &chat;
+}
 
 void ChatViewController::disconnect()
 {
     chat.disconnect();
 }
 
-void ChatViewController::testConnect()
+bool ChatViewController::tryConnect()
 {
-    chat.tryConnect();
+    return chat.tryConnect();
+}
+
+bool ChatViewController::tryRegister()
+{
+    ErrorType error =  chat.tryRegister();
+    auto [result, description] = ErrorHelper::parseRegistrationError(error, chat.getClientName());
+    reportError(description);
+    return result;
 }
 
 void ChatViewController::reportError(string_view error)
@@ -18,13 +30,6 @@ void ChatViewController::reportError(string_view error)
     }
 }
 
-
-void ChatViewController::testRegister(std::string_view name)
-{
-    ErrorType error =  chat.tryRegister(name);
-    auto [result, description] = ErrorHelper::parseRegistrationError(error, name);
-    reportError(description);
-}
 
 void ChatViewController::sendButtonClicked(string_view text)
 {
@@ -41,4 +46,5 @@ void ChatViewController::setTextMessageCallback(std::function<void(string)> call
 void ChatViewController::setErrorMessageCallback(std::function<void (string)> callback)
 {
     errorMessageCallback = callback;
+    chat.setErrorMessageCallback(callback);
 }

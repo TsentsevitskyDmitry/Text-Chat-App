@@ -13,9 +13,11 @@ private:
     void reportError(std::string_view error);
 
 public:
+    ChatClient* getChat();
+
     void disconnect();
-    void testConnect();
-    void testRegister(std::string_view name);
+    bool tryConnect();
+    bool tryRegister();
     void sendButtonClicked(std::string_view text);
 
     void setTextMessageCallback(std::function<void(string)> callback);
