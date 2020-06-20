@@ -1,15 +1,17 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_mainwindow.h"
 #include "Service/ServerSocket.h"
 #include "Messages/ChatMessage.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    dialog(controller.getChat(), this)
 {
     ui->setupUi(this);
-    connect(this, &MainWindow::messageRecieved, ui->textBrowser, &QTextBrowser::append);
-    connect(this, &MainWindow::errorRecieved, ui->textBrowser, &QTextBrowser::append);
+    connect(this, &MainWindow::messageRecieved, ui->textBrowser, &QTextEdit::append);
+    connect(this, &MainWindow::errorRecieved, ui->textBrowser, &QTextEdit::append);
+    setupCallback();
 }
 
 MainWindow::~MainWindow()
@@ -31,18 +33,15 @@ void MainWindow::setupCallback()
     controller.setErrorMessageCallback(error);
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_connectionButton_clicked()
 {
-    controller.sendButtonClicked(ui->sendEdit->text().toStdString());
+    dialog.exec();
+    controller.tryConnect();
+    controller.tryRegister();
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_sendButton_clicked()
 {
-    controller.testConnect();
-    setupCallback();
-}
-
-void MainWindow::on_pushButton_3_clicked()
-{
-    controller.testRegister(ui->regEdit->text().toStdString());
+    controller.sendButtonClicked(ui->sendEdit->toPlainText().toStdString());
+    ui->sendEdit->clear();
 }

@@ -16,7 +16,7 @@ private:
     bool recvMessage(BaseMessage& message, MessageType type);
 
 public:
-    // void setup();
+    void setup(ConnectionSettings& settings);
     void disconnect();
     bool tryConnect();
     bool isConnected();

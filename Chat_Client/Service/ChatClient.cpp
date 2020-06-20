@@ -3,18 +3,32 @@
 ChatClient::~ChatClient()
 {
     disconnect();
-    recvThread->join();
+}
+
+void ChatClient::setup(ConnectionSettings settings)
+{
+    this->settings = settings;
+    helper.setup(settings);
 }
 
 void ChatClient::disconnect()
 {
     registered = false;;
     helper.disconnect();
+    if(recvThread){
+        recvThread->join();
+    }
 }
 
 bool ChatClient::tryConnect()
 {
+    disconnect();
     return helper.tryConnect();
+}
+
+bool ChatClient::isConnected()
+{
+    return helper.isConnected();
 }
 
 bool ChatClient::isRegistered()
@@ -22,20 +36,43 @@ bool ChatClient::isRegistered()
     return registered;
 }
 
-ErrorType ChatClient::tryRegister(std::string_view name)
+ErrorType ChatClient::tryRegister()
 {
-    if(name.length() < 1){
+    registered = false;
+    if(settings.getName().length() < 1){
+        helper.disconnect();
         return ErrorType::INTERNAL_ERROR;
     }
-    clientName = name;
-    RegisterMessage rm(name);
+    RegisterMessage rm(settings.getName());
     helper.sendMessage(rm);
     ErrorMessage error;
     helper.recvErrorMessage(error);
     if (error.getError() == ErrorType::NO_ERROR_ERROR){
         registered = true;
     }
+    startRecv();
     return error.getError();
+}
+
+void ChatClient::startRecv()
+{
+    if(recvThread){
+        if(recvThread->joinable()){
+            return;
+        }
+    }
+
+
+    auto worker = [this] () {
+        while (isRegistered()){
+            string text;
+            if(recvTextMessage(text) && recvCallbackFunction){
+                cout << "got: " << text << endl;
+                recvCallbackFunction(text);
+            }
+        }
+    };
+    recvThread = new thread(worker);
 }
 
 bool ChatClient::sendTextMessage(std::string_view text)
@@ -57,20 +94,9 @@ bool ChatClient::recvTextMessage(string &text)
 void ChatClient::setTextMessageCallback(std::function<void (string)> callback)
 {
     recvCallbackFunction = callback;
-    if(recvThread)
-        return;
+}
 
-    auto worker = [this] () {
-        while(!isRegistered()){
-            std::this_thread::sleep_for(100ms);
-        }
-        while (helper.isConnected()){
-            string text;
-            if(recvTextMessage(text) && recvCallbackFunction){
-                cout << "got: " << text << endl;
-                recvCallbackFunction(text);
-            }
-        }
-    };
-    recvThread = new thread(worker);
+string ChatClient::getClientName()
+{
+    return settings.getName();
 }
