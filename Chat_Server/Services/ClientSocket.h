@@ -31,7 +31,7 @@ public:
 
     bool sendRaw(char* data, size_t size);
     bool sendRawTo(char* data, size_t size, SOCKET socket);
-    bool recvRaw(char* buff, size_t* size, size_t buffLen);
+    bool recvRaw(char* buff, size_t buffSize, size_t* recvBytes);
 };
 
 #endif // SERVERSOCKET_H

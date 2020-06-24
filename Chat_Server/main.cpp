@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Controllers/ServerController.h"
+#include "Controllers/StatusController.h"
 
 using namespace std;
 
@@ -12,14 +13,16 @@ int main()
 //    s.loadFromFile(".file");
 //    ServerController::getInstance()->setup(s);
 
-    ServerController::getInstance()->start();
+    ServerController server;
 
-//    auto remoteController = [] () {
-//        RemoteController r;
-//        r.listen();
-//    };
-//    std::thread t(remoteController);
-//    t.join();
+    auto statusController = [&server] () {
+        StatusController status(&server);
+        status.start(); // thread blocking
+    };
+    std::thread statusThread(statusController);
+
+    server.start(); // thread blocking
+    statusThread.join();
 
     return 0;
 }

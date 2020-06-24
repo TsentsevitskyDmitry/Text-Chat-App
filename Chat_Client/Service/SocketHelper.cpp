@@ -30,7 +30,7 @@ bool SocketHelper::sendMessage(BaseMessage &message)
 bool SocketHelper::recvMeta(MetaData &meta)
 {
     size_t size;
-    return socket.recvRaw(reinterpret_cast<char*>(&meta), &size, sizeof (meta));
+    return socket.recvRaw(reinterpret_cast<char*>(&meta), sizeof (meta), &size);
 }
 
 bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
@@ -41,7 +41,7 @@ bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
         return false;
     }
     char* data = new char[meta.contentSize];
-    bool success = socket.recvRaw(data, &size, meta.contentSize);
+    bool success = socket.recvRaw(data, meta.contentSize, &size);
     if (!success || meta.contentType != type){
         return false;
     }

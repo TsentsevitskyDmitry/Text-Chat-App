@@ -1,23 +1,16 @@
 #include "ServerController.h"
 
-
-ServerController* ServerController::getInstance()
+bool ServerController::isRunning()
 {
-    static ServerController* instance = nullptr;
-    if (!instance){
-        instance = new ServerController();
-    }
-    return instance;
+    return running;
 }
 
 void ServerController::start()
 {
-//    settings ??
-//    server.setup();
-
+    running = true;
     server.bindServerSocket();
 
-    while(1){
+    while(running){
         SOCKET clientSocket = server.acceptClient();
         //
         auto processor = [this] (SOCKET clientSocket) {
@@ -34,5 +27,11 @@ void ServerController::start()
 
 void ServerController::stop()
 {
+    running = false;
     server.clean();
+}
+
+ChatServer *ServerController::getChat()
+{
+    return &server;
 }
