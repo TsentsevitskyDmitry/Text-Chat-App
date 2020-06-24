@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,4 +28,23 @@ MainWindow::~MainWindow()
 void MainWindow::on_updateButton_clicked()
 {
     controller.updateButtonPressed();
+}
+
+void MainWindow::on_installButton_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open Image"), "./", tr("Executable (*.exe)"));
+    if(fileName.length()){
+        controller.installButtonPressed(fileName.toStdString());
+    }
+}
+
+void MainWindow::on_removeButton_clicked()
+{
+
+}
+
+void MainWindow::on_startButton_clicked()
+{
+
 }

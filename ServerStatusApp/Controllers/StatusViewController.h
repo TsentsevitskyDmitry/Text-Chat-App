@@ -14,7 +14,7 @@ private:
 
 public:
     void updateButtonPressed();
-    void installButtonPressed();
+    void installButtonPressed(std::string path);
     void removeButtonPressed();
     void startButtonPressed();
 

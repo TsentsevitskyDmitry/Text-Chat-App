@@ -19,6 +19,12 @@ private:
 private slots:
     void on_updateButton_clicked();
 
+    void on_installButton_clicked();
+
+    void on_removeButton_clicked();
+
+    void on_startButton_clicked();
+
 signals:
     void usersUpdate(QString message);
     void stateUpdate(QString message);
