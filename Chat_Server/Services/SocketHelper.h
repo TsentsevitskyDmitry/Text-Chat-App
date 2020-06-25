@@ -25,6 +25,7 @@ public:
     void disconnect();
 
     bool sendMessage(BaseMessage& message, ClientInfo dest);
+    bool sendMessage(BaseMessage&& message, ClientInfo dest);
 
     bool recvRegistrationName(std::string& name);
     bool recvChatMessage(BaseMessage& message);

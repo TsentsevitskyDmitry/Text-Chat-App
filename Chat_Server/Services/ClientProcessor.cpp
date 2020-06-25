@@ -1,5 +1,5 @@
 #include "ClientProcessor.h"
-
+#include <omp.h>
 
 void ClientProcessor::process()
 {
@@ -18,34 +18,41 @@ void ClientProcessor::process()
     releaseClient();
 }
 
-bool ClientProcessor::tyrRegister()
-{
-    ErrorMessage error;
-    if(!registerClient()){
-        cout << "Registration failed" << endl;
-        error.setError(ErrorType::NAME_ALREADY_USED_ERROR);
-    }
-    else{
-        cout << "User '" << this->clientName << "' connected!" << endl;
-        error.setError(ErrorType::NO_ERROR_ERROR);
-    }
-    helper.sendMessage(error, this->info);
-    if(error.getError() == ErrorType::NAME_ALREADY_USED_ERROR){
-        helper.disconnect();
-        return false;
-    }
-    return true;
-}
-
 void ClientProcessor::broadcast(string &sender, ChatMessage &message)
 {
     ChatMessage cm(sender + ": " + message.getData());
     server->lockClients();
     auto clients = server->getClients();
-    for(auto& [name, info] : *clients){
-        helper.sendMessage(cm, info);
+    int count = static_cast<int>(clients->size());
+
+    omp_set_dynamic(0);
+    omp_set_num_threads(count);
+    #pragma omp parallel for
+    for (int i = 0; i < count; i++) {
+        const auto& [name, client] = *(std::next(clients->begin(), i));
+        helper.sendMessage(cm, client);
     }
+
+//    // Serial broadcst
+//    for(const auto& [name, client] : *clients){
+//        helper.sendMessage(cm, client);
+//    }
     server->unlockClients();
+}
+
+bool ClientProcessor::tyrRegister()
+{
+    if(!registerClient()){
+        cout << "Registration failed" << endl;
+        helper.sendMessage(ErrorMessage(ErrorType::NAME_ALREADY_USED_ERROR), this->info);
+        helper.disconnect();
+        return false;
+    }
+    else{
+        cout << "User '" << this->clientName << "' connected!" << endl;
+        helper.sendMessage(ErrorMessage(ErrorType::NO_ERROR_ERROR), this->info);
+    }
+    return true;
 }
 
 bool ClientProcessor::registerClient()

@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
 private:
     Ui::MainWindow *ui;
     ChatViewController controller;
-    ConnectDialog dialog;
+    ConnectDialog connectDialog;
     void setupCallback();
     void setTitle(QString text);
 

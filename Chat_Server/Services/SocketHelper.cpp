@@ -16,6 +16,11 @@ bool SocketHelper::sendMessage(BaseMessage& message, ClientInfo dest)
     return socket.sendRawTo(message.getSerializedData(), message.getSerializedSize(), dest.getSocket());
 }
 
+bool SocketHelper::sendMessage(BaseMessage&& message, ClientInfo dest)
+{
+    return sendMessage(message, dest);
+}
+
 bool SocketHelper::recvMeta(MetaData &meta)
 {
     size_t size;

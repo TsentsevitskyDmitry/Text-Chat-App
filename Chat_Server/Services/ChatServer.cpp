@@ -5,22 +5,6 @@ ChatServer::~ChatServer()
     clean();
 }
 
-void ChatServer::setup(ServerConfig &config)
-{
-    this->config = config;
-}
-
-uint32_t ChatServer::getRunnigPort()
-{
-    uint32_t port = 0;
-    try {
-        port = stoul(config.getPort());
-    } catch (...) {
-        cout << "port error" << endl;
-    }
-    return port;
-}
-
 bool ChatServer::bindServerSocket()
 {
     WSADATA wsaData;
@@ -100,9 +84,20 @@ SOCKET ChatServer::acceptClient()
     return clientSocket;
 }
 
-void ChatServer::lockClients()
+void ChatServer::setup(ServerConfig &config)
 {
-    mutex.lock();
+    this->config = config;
+}
+
+uint32_t ChatServer::getRunnigPort()
+{
+    uint32_t port = 0;
+    try {
+        port = stoul(config.getPort());
+    } catch (...) {
+        cout << "port error" << endl;
+    }
+    return port;
 }
 
 std::unordered_map<string, ClientInfo>* ChatServer::getClients()
@@ -110,7 +105,12 @@ std::unordered_map<string, ClientInfo>* ChatServer::getClients()
     return &clients;
 }
 
+void ChatServer::lockClients()
+{
+    clientsMutex.lock();
+}
+
 void ChatServer::unlockClients()
 {
-    mutex.unlock();
+    clientsMutex.unlock();
 }

@@ -6,7 +6,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    dialog(controller.getChat(), this)
+    connectDialog(controller.getChat(), this)
 {
     ui->setupUi(this);
     connect(this, &MainWindow::messageRecieved, ui->textBrowser, &QTextEdit::append);
@@ -40,7 +40,9 @@ void MainWindow::setTitle(QString text)
 
 void MainWindow::on_connectionButton_clicked()
 {
-    dialog.exec();
+    if (connectDialog.exec() ==  QDialog::DialogCode::Rejected){
+        return;
+    }
     setTitle("Connecting...");
     controller.tryConnect();
     QString result = controller.tryRegister() ? "Connected" : "Error";

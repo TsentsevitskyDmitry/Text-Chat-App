@@ -20,15 +20,15 @@ class ChatServer
 {
 private:
     SOCKET listenSocket;
-    std::mutex mutex;
+    std::mutex clientsMutex;
     std::unordered_map<string, ClientInfo> clients;
     ServerConfig config;
 
 public:
     ~ChatServer();
 
-    uint32_t getRunnigPort();
     void setup(ServerConfig& config);
+    uint32_t getRunnigPort();
 
     bool bindServerSocket();
     SOCKET acceptClient();

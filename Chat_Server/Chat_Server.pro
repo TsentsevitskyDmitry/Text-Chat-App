@@ -3,6 +3,9 @@ CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
+QMAKE_CXXFLAGS += -fopenmp
+QMAKE_LFLAGS +=  -fopenmp
+
 INCLUDEPATH += "D:/Shared/Libraries/include/"
 LIBS += -lws2_32
 

@@ -10,8 +10,6 @@ int main()
 {
     cout << "running" << endl;
 
-
-
     ServerController server;
     StatusController status(&server);
 
@@ -26,19 +24,14 @@ int main()
         server.start(); // thread blocking
     };
 
-
     std::thread statusThread(statusController);
     std::thread serverThread(serverController);
 
 
     cin.get();
-    cout << "here 2" << endl;
 
     status.stop();
     server.stop();
-
-    cout << "here 3" << endl;
-
 
     statusThread.join();
     serverThread.join();
