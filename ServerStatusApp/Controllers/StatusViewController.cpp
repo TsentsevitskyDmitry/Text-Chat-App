@@ -9,6 +9,21 @@ void StatusViewController::updateButtonPressed()
     }
 }
 
+void StatusViewController::installButtonPressed(std::string path)
+{
+
+}
+
+void StatusViewController::removeButtonPressed()
+{
+
+}
+
+void StatusViewController::startButtonPressed()
+{
+
+}
+
 void StatusViewController::setDataArrivedCallback(std::function<void (ServerInfo &)> callback)
 {
     dataArrived = callback;

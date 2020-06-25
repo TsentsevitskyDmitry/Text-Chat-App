@@ -9,7 +9,7 @@ private:
     std::string port;
 
 public:
-    ServerConfig(std::string _port) : port(_port) {}
+    ServerConfig() : port("0") {}
 
     std::string getPort();
     void setPort(std::string& port);

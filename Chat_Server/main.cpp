@@ -1,28 +1,47 @@
 #include <iostream>
 #include "Controllers/ServerController.h"
 #include "Controllers/StatusController.h"
+#include "Services/Settings.h"
 
 using namespace std;
 
 
 int main()
 {
-    cout << "Hello World!" << endl;
+    cout << "running" << endl;
 
-//    Settinsg s;
-//    s.loadFromFile(".file");
-//    ServerController::getInstance()->setup(s);
+
 
     ServerController server;
+    StatusController status(&server);
 
-    auto statusController = [&server] () {
-        StatusController status(&server);
+    ServerConfig config;
+    Settings::getConfig(config);
+    server.setup(config);
+
+    auto statusController = [&status] () {
         status.start(); // thread blocking
     };
-    std::thread statusThread(statusController);
+    auto serverController = [&server] () {
+        server.start(); // thread blocking
+    };
 
-    server.start(); // thread blocking
+
+    std::thread statusThread(statusController);
+    std::thread serverThread(serverController);
+
+
+    cin.get();
+    cout << "here 2" << endl;
+
+    status.stop();
+    server.stop();
+
+    cout << "here 3" << endl;
+
+
     statusThread.join();
+    serverThread.join();
 
     return 0;
 }

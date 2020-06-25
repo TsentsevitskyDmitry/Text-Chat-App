@@ -13,8 +13,11 @@ private:
 public:
 //    StatusPipe();
 
+    bool create();
     bool waitClient();
+    void disconnect();
     void close();
+    void stop();
 
     bool read(char* buff, size_t buffSize, size_t* recvBytes);
     bool write(char* buff, size_t size);

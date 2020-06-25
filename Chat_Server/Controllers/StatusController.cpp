@@ -8,13 +8,15 @@ bool StatusController::isRunning()
 void StatusController::start()
 {
     running = true;
+    helper.create();
     while (running) {
         helper.waitAndSend();
     }
+    helper.close();
 }
 
 void StatusController::stop()
 {
     running = false;
-    helper.clean();
+    helper.stop();
 }

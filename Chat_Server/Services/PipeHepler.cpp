@@ -6,6 +6,11 @@ bool PipeHepler::setStatus(ServerInfo& info)
     return pipe.write(info.getSerializedData(), info.getSerializedSize());
 }
 
+void PipeHepler::create()
+{
+    pipe.create();
+}
+
 void PipeHepler::waitAndSend()
 {
     pipe.waitClient();
@@ -14,10 +19,15 @@ void PipeHepler::waitAndSend()
 //    ServerInfo info(228, 1337);
     chat->unlockClients();
     setStatus(info);
+    pipe.disconnect();
+}
+
+void PipeHepler::close()
+{
     pipe.close();
 }
 
-void PipeHepler::clean()
+void PipeHepler::stop()
 {
-    pipe.close();
+    pipe.stop();
 }

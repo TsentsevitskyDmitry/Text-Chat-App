@@ -60,7 +60,6 @@ bool ServerSocket::tryConnect()
         ptr->ai_protocol);
 
     if (connectSocket  == INVALID_SOCKET) {
-        printf("Error at socket(): %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         connected = false;
         return false;

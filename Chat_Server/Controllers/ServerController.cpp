@@ -5,10 +5,17 @@ bool ServerController::isRunning()
     return running;
 }
 
+void ServerController::setup(ServerConfig &config)
+{
+    server.setup(config);
+}
+
 void ServerController::start()
 {
     running = true;
-    server.bindServerSocket();
+    if(!server.bindServerSocket()){
+        return;
+    }
 
     while(running){
         SOCKET clientSocket = server.acceptClient();

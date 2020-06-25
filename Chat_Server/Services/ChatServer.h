@@ -25,9 +25,10 @@ private:
     ServerConfig config;
 
 public:
-    ChatServer() : config("27015") {}
     ~ChatServer();
+
     uint32_t getRunnigPort();
+    void setup(ServerConfig& config);
 
     bool bindServerSocket();
     SOCKET acceptClient();

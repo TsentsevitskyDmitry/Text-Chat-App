@@ -15,8 +15,10 @@ private:
 public:
     PipeHepler(ChatServer* _chat) : chat(_chat) {}
 
+    void create();
     void waitAndSend();
-    void clean();
+    void close();
+    void stop();
 };
 
 #endif // PIPEHEPLER_H

@@ -3,6 +3,7 @@ CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
+INCLUDEPATH += "D:/Shared/Libraries/include/"
 LIBS += -lws2_32
 
 SOURCES += \
@@ -21,7 +22,8 @@ SOURCES += \
     Models/ServerInfo.cpp \
     Services/StatusPipe.cpp \
     Services/PipeHepler.cpp \
-    Models/ServerConfig.cpp
+    Models/ServerConfig.cpp \
+    Services/Settings.cpp
 
 
 HEADERS += \
@@ -40,4 +42,5 @@ HEADERS += \
     Models/ServerInfo.h \
     Services/StatusPipe.h \
     Services/PipeHepler.h \
-    Models/ServerConfig.h
+    Models/ServerConfig.h \
+    Services/Settings.h

@@ -5,6 +5,11 @@ ChatServer::~ChatServer()
     clean();
 }
 
+void ChatServer::setup(ServerConfig &config)
+{
+    this->config = config;
+}
+
 uint32_t ChatServer::getRunnigPort()
 {
     uint32_t port = 0;

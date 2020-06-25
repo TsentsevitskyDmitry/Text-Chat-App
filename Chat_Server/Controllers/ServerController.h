@@ -16,6 +16,7 @@ public:
 //    ~ServerController();
 
     bool isRunning();
+    void setup(ServerConfig& config);
     void start();
     void stop();
     ChatServer* getChat();

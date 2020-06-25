@@ -41,10 +41,10 @@ void MainWindow::on_installButton_clicked()
 
 void MainWindow::on_removeButton_clicked()
 {
-
+    controller.removeButtonPressed();
 }
 
 void MainWindow::on_startButton_clicked()
 {
-
+    controller.startButtonPressed();
 }
