@@ -19,6 +19,7 @@ private:
     ConnectDialog connectDialog;
     void setupCallback();
     void setTitle(QString text);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private slots:
     void on_sendButton_clicked();

@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(this, &MainWindow::messageRecieved, ui->textBrowser, &QTextEdit::append);
     connect(this, &MainWindow::errorRecieved, ui->textBrowser, &QTextEdit::append);
+    ui->sendEdit->installEventFilter(this);
+
     setupCallback();
 }
 
@@ -36,6 +38,28 @@ void MainWindow::setupCallback()
 void MainWindow::setTitle(QString text)
 {
     this->setWindowTitle(text);
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if(watched == ui->sendEdit)
+    {
+        if(event->type() == QKeyEvent::KeyPress)
+        {
+            QKeyEvent * ke = static_cast<QKeyEvent*>(event);
+            if(ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
+            {
+                on_sendButton_clicked();
+                return true; // do not process this event further
+            }
+        }
+        return false; // process this event further
+    }
+    else
+    {
+        // pass the event on to the parent class
+        return QMainWindow::eventFilter(watched, event);
+    }
 }
 
 void MainWindow::on_connectionButton_clicked()
