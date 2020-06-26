@@ -13,10 +13,10 @@ using namespace std;
 class ClientProcessor
 {
 private:
+    ChatServer* server;
+    SocketHelper helper;
     ClientInfo info;
     string clientName;
-    SocketHelper helper;
-    ChatServer* server;
 
     bool tyrRegister();
     bool registerClient();
@@ -24,7 +24,7 @@ private:
     void broadcast(std::string& sender, ChatMessage& message);
 
 public:
-    ClientProcessor(ChatServer* _server, SOCKET _socket) : info(_socket), helper(_socket), server(_server) {}
+    ClientProcessor(ChatServer* _server, SOCKET _socket) : server(_server), helper(_socket), info(&helper) {}
 
     void process();
 

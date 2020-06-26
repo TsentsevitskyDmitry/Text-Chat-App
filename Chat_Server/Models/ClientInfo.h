@@ -1,16 +1,16 @@
 #ifndef CLIENTINFO_H
 #define CLIENTINFO_H
 
-#include <winsock2.h>
+#include "Services/SocketHelper.h"
 
 class ClientInfo
 {
 private:
-    SOCKET socket;
+    SocketHelper* helper;
 
 public:
-    ClientInfo(SOCKET _socket) : socket(_socket) {}
-    SOCKET getSocket() const;
+    ClientInfo(SocketHelper*  _helper) : helper(_helper) {}
+    SocketHelper* getHelper();
 };
 
 #endif // CLIENTINFO_H

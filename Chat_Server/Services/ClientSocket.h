@@ -10,7 +10,6 @@
 #include <iphlpapi.h>
 #include <iostream>
 #include "Messages/ChatMessage.h"
-#include "Models/ClientInfo.h"
 
 using namespace std;
 

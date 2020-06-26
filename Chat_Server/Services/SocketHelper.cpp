@@ -2,29 +2,40 @@
 
 bool SocketHelper::isClientConnected()
 {
-    return socket.isClientConnected();
+    return clientSocket.isClientConnected();
 }
 
 void SocketHelper::disconnect()
 {
-    socket.disconnect();
+    clientSocket.disconnect();
 }
 
-bool SocketHelper::sendMessage(BaseMessage& message, ClientInfo dest)
+bool SocketHelper::sendMessage(BaseMessage& message)
 {
     message.serialize();
-    return socket.sendRawTo(message.getSerializedData(), message.getSerializedSize(), dest.getSocket());
+    return sendSerializedMessage(message);
 }
 
-bool SocketHelper::sendMessage(BaseMessage&& message, ClientInfo dest)
+bool SocketHelper::sendMessage(BaseMessage&& message)
 {
-    return sendMessage(message, dest);
+    return sendMessage(message);
 }
+
+bool SocketHelper::sendSerializedMessage(BaseMessage& message)
+{
+    return clientSocket.sendRaw(message.getSerializedData(), message.getSerializedSize());
+}
+
+bool SocketHelper::sendSerializedMessage(BaseMessage&& message)
+{
+    return sendSerializedMessage(message);
+}
+
 
 bool SocketHelper::recvMeta(MetaData &meta)
 {
     size_t size;
-    return socket.recvRaw(reinterpret_cast<char*>(&meta), sizeof (meta), &size);
+    return clientSocket.recvRaw(reinterpret_cast<char*>(&meta), sizeof (meta), &size);
 }
 
 bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
@@ -35,7 +46,7 @@ bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
         return false;
     }
     char* data = new char[meta.contentSize];
-    bool success = socket.recvRaw(data, meta.contentSize, &size);
+    bool success = clientSocket.recvRaw(data, meta.contentSize, &size);
     if (!success || meta.contentType != type){
         return false;
     }
