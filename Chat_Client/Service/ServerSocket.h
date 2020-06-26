@@ -32,7 +32,7 @@ public:
     void disconnect();
 
     bool sendRaw(char* data, size_t size);
-    bool recvRaw(char* buff, size_t* size, size_t buffSize);
+    bool recvRaw(char* buff, size_t buffSize, size_t* recvBytes);
 
     static int getLastErrorCode();
 };

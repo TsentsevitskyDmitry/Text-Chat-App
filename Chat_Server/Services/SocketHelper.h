@@ -1,7 +1,6 @@
 #ifndef SOCKETHELPER_H
 #define SOCKETHELPER_H
 
-#include "Models/ClientInfo.h"
 #include "Services/ClientSocket.h"
 #include "Messages/MessageTypes.h"
 #include "Messages/ErrorMessage.h"
@@ -12,19 +11,23 @@
 class SocketHelper
 {
 private:
-    ClientSocket socket;
+    ClientSocket clientSocket;
 
     bool recvMeta(MetaData& meta);
     bool recvMessage(BaseMessage& message, MessageType type);
     bool recvRegistrationMessage(BaseMessage& message);
 
 public:
-    SocketHelper(SOCKET _socket) : socket(_socket) {}
+    SocketHelper(SOCKET _clientSocket) : clientSocket(_clientSocket) {}
 
     bool isClientConnected();
     void disconnect();
 
-    bool sendMessage(BaseMessage& message, ClientInfo dest);
+    bool sendMessage(BaseMessage& message);
+    bool sendMessage(BaseMessage&& message);
+
+    bool sendSerializedMessage(BaseMessage& message);
+    bool sendSerializedMessage(BaseMessage&& message);
 
     bool recvRegistrationName(std::string& name);
     bool recvChatMessage(BaseMessage& message);

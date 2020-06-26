@@ -26,7 +26,7 @@ bool ChatServer::bindServerSocket()
     hints.ai_flags = AI_PASSIVE;
 
     // Resolve the local address and port to be used by the server
-    iResult = getaddrinfo(nullptr, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(nullptr, config.getPort().c_str(), &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed: %d\n", iResult);
         WSACleanup();
@@ -84,9 +84,20 @@ SOCKET ChatServer::acceptClient()
     return clientSocket;
 }
 
-void ChatServer::lockClients()
+void ChatServer::setup(ServerConfig &config)
 {
-    mutex.lock();
+    this->config = config;
+}
+
+uint32_t ChatServer::getRunnigPort()
+{
+    uint32_t port = 0;
+    try {
+        port = stoul(config.getPort());
+    } catch (...) {
+        cout << "port error" << endl;
+    }
+    return port;
 }
 
 std::unordered_map<string, ClientInfo>* ChatServer::getClients()
@@ -94,7 +105,12 @@ std::unordered_map<string, ClientInfo>* ChatServer::getClients()
     return &clients;
 }
 
+void ChatServer::lockClients()
+{
+    clientsMutex.lock();
+}
+
 void ChatServer::unlockClients()
 {
-    mutex.unlock();
+    clientsMutex.unlock();
 }

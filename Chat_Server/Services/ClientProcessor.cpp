@@ -1,5 +1,7 @@
 #include "ClientProcessor.h"
-
+#include <omp.h>
+#include <vector>
+#include <thread>
 
 void ClientProcessor::process()
 {
@@ -18,34 +20,47 @@ void ClientProcessor::process()
     releaseClient();
 }
 
-bool ClientProcessor::tyrRegister()
-{
-    ErrorMessage error;
-    if(!registerClient()){
-        cout << "Registration failed" << endl;
-        error.setError(ErrorType::NAME_ALREADY_USED_ERROR);
-    }
-    else{
-        cout << "User '" << this->clientName << "' connected!" << endl;
-        error.setError(ErrorType::NO_ERROR_ERROR);
-    }
-    helper.sendMessage(error, this->info);
-    if(error.getError() == ErrorType::NAME_ALREADY_USED_ERROR){
-        helper.disconnect();
-        return false;
-    }
-    return true;
-}
-
 void ClientProcessor::broadcast(string &sender, ChatMessage &message)
 {
     ChatMessage cm(sender + ": " + message.getData());
+    cm.serialize();
     server->lockClients();
     auto clients = server->getClients();
-    for(auto& [name, info] : *clients){
-        helper.sendMessage(cm, info);
+    int count = static_cast<int>(clients->size());
+
+    if(count >= 100) {
+        // Use OpenMP
+        omp_set_dynamic(0);
+        omp_set_num_threads(count);
+        #pragma omp parallel for
+        for(int i = 0; i < count; ++i){
+            auto& [name, client] = *(std::next(clients->begin(), i));
+             client.getHelper()->sendSerializedMessage(cm);
+        }
     }
+    else {
+        // Serial broadcst
+        for(auto& [name, client] : *clients){
+            client.getHelper()->sendSerializedMessage(cm);
+        }
+    }
+
     server->unlockClients();
+}               
+
+bool ClientProcessor::tyrRegister()
+{
+    if(!registerClient()){
+        cout << "Registration failed" << endl;
+        helper.sendMessage(ErrorMessage(ErrorType::NAME_ALREADY_USED_ERROR));
+        helper.disconnect();
+        return false;
+    }
+    else{
+        cout << "User '" << this->clientName << "' connected!" << endl;
+        helper.sendMessage(ErrorMessage(ErrorType::NO_ERROR_ERROR));
+    }
+    return true;
 }
 
 bool ClientProcessor::registerClient()

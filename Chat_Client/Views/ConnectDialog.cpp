@@ -23,5 +23,5 @@ void ConnectDialog::on_connectButton_clicked()
                                     this->ui->portEdit->text().toStdString(),
                                     this->ui->nameEdit->text().toStdString()
                                     );
-    this->close();
+    this->accept();
 }

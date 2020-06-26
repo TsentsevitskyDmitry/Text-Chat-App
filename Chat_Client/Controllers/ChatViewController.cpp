@@ -33,6 +33,9 @@ void ChatViewController::reportError(string_view error)
 
 void ChatViewController::sendButtonClicked(string_view text)
 {
+    if(!text.length()){
+        return;
+    }
     if(!chat.sendTextMessage(text)){
      reportError(ErrorHelper::messageNotSent(text));
     }

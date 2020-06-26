@@ -11,27 +11,28 @@
 #include <iostream>
 #include <unordered_map>
 #include <mutex>
+#include "Models/ServerConfig.h"
 #include "Models/ClientInfo.h"
 
 using namespace std;
-
-#define DEFAULT_PORT "27015"
 
 class ChatServer
 {
 private:
     SOCKET listenSocket;
-    string port;
-    std::mutex mutex;
+    std::mutex clientsMutex;
     std::unordered_map<string, ClientInfo> clients;
+    ServerConfig config;
 
 public:
-//    ChatServer();
     ~ChatServer();
 
+    void setup(ServerConfig& config);
+    uint32_t getRunnigPort();
+
     bool bindServerSocket();
-    void clean();
     SOCKET acceptClient();
+    void clean();
 
     void lockClients();
     std::unordered_map<string, ClientInfo>* getClients();

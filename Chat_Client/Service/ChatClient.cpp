@@ -70,7 +70,7 @@ void ChatClient::startRecv()
                 cout << "got: " << text << endl;
                 recvCallbackFunction(text);
             }
-            else if (errorCallbackFunction){
+            else if (isRegistered() && errorCallbackFunction){
                 errorCallbackFunction("Server error.");
             }
         }

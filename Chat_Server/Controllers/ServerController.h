@@ -8,16 +8,18 @@
 class ServerController
 {
 private:
-    static ServerController* instance;
     ChatServer server;
+    bool running;
 
 public:
-//    ServerController();
+    ServerController() : running(false) {}
 //    ~ServerController();
 
-    static ServerController* getInstance();
+    bool isRunning();
+    void setup(ServerConfig& config);
     void start();
     void stop();
+    ChatServer* getChat();
 };
 
 #endif // CHATPROCESSOR_H

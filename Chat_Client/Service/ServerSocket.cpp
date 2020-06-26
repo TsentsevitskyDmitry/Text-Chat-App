@@ -60,7 +60,6 @@ bool ServerSocket::tryConnect()
         ptr->ai_protocol);
 
     if (connectSocket  == INVALID_SOCKET) {
-        printf("Error at socket(): %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         connected = false;
         return false;
@@ -101,7 +100,7 @@ bool ServerSocket::sendRaw(char *data, size_t size)
         return true;
 }
 
-bool ServerSocket::recvRaw(char *buff, size_t *size, size_t buffSize)
+bool ServerSocket::recvRaw(char* buff, size_t buffSize, size_t* recvBytes)
 {
     int iResult = recv(connectSocket, buff, static_cast<int>(buffSize), 0);
     if (iResult > 0) {
@@ -112,7 +111,7 @@ bool ServerSocket::recvRaw(char *buff, size_t *size, size_t buffSize)
         connected = false;
         return false;
     }
-    *size = static_cast<size_t>(iResult);
+    *recvBytes = static_cast<size_t>(iResult);
     return true;
 }
 

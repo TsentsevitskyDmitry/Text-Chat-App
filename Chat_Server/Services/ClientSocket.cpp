@@ -20,9 +20,9 @@ bool ClientSocket::sendRawTo(char *data, size_t size, SOCKET socket)
     return true;
 }
 
-bool ClientSocket::recvRaw(char* buff, size_t* size, size_t buffLen)
+bool ClientSocket::recvRaw(char* buff, size_t buffSize, size_t* recvBytes)
 {
-    int iResult = recv(clientSocket, buff, static_cast<int>(buffLen), 0);
+    int iResult = recv(clientSocket, buff, static_cast<int>(buffSize), 0);
     if (iResult > 0) {
         printf("Bytes received: %d\n", iResult);
     }
@@ -31,7 +31,7 @@ bool ClientSocket::recvRaw(char* buff, size_t* size, size_t buffLen)
         clientConnected = false;
         return false;
     }
-    *size = static_cast<size_t>(iResult);
+    *recvBytes = static_cast<size_t>(iResult);
     return true;
 }
 
