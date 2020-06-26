@@ -3,18 +3,36 @@
 
 void ChatMessage::calculateSerializedSize()
 {
-    serializedSize = messageData.length();
+    serializedSize = messageData.length() + sender.length() + 2 * sizeof(size_t);
 }
 
 void ChatMessage::_serialize(char *addr)
 {
-    memcpy(addr, messageData.data(), messageData.length());
+    size_t* messageDataSize = reinterpret_cast<size_t*>(addr);
+    *messageDataSize = messageData.length();
+    addr += sizeof (size_t);
+    memcpy(addr, messageData.c_str(), messageData.length());
+    addr += messageData.length();
+
+    size_t* senderSize = reinterpret_cast<size_t*>(addr);
+    *senderSize = sender.length();
+    addr += sizeof (size_t);
+    memcpy(addr, sender.c_str(), messageData.length());
 }
 
 bool ChatMessage::restore(char *data, size_t size)
 {
-    messageData = std::string(data, size);
-    return messageData.length();
+    size_t* messageDataSize = reinterpret_cast<size_t*>(data);
+    data += sizeof (size_t);
+    messageData = std::string(data, *messageDataSize);
+    data += messageData.length();
+
+    size_t* senderSize = reinterpret_cast<size_t*>(data);
+    data += sizeof (size_t);
+    sender = std::string(data, *senderSize);
+
+    calculateSerializedSize();
+    return serializedSize == size;
 }
 
 MessageType ChatMessage::getMessageType()
@@ -25,4 +43,9 @@ MessageType ChatMessage::getMessageType()
 std::string ChatMessage::getData()
 {
     return messageData;
+}
+
+std::string ChatMessage::getSender()
+{
+    return sender;
 }

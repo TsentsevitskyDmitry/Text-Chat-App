@@ -22,8 +22,7 @@ void ClientProcessor::process()
 
 void ClientProcessor::broadcast(string &sender, ChatMessage &message)
 {
-    ChatMessage cm(sender + ": " + message.getData());
-    cm.serialize();
+    message.serialize();
     server->lockClients();
     auto clients = server->getClients();
     int count = static_cast<int>(clients->size());
@@ -35,13 +34,13 @@ void ClientProcessor::broadcast(string &sender, ChatMessage &message)
         #pragma omp parallel for
         for(int i = 0; i < count; ++i){
             auto& [name, client] = *(std::next(clients->begin(), i));
-             client.getHelper()->sendSerializedMessage(cm);
+             client.getHelper()->sendSerializedMessage(message);
         }
     }
     else {
         // Serial broadcst
         for(auto& [name, client] : *clients){
-            client.getHelper()->sendSerializedMessage(cm);
+            client.getHelper()->sendSerializedMessage(message);
         }
     }
 

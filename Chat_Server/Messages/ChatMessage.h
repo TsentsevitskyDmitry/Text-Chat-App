@@ -8,10 +8,11 @@ class ChatMessage : public BaseMessage
 {
 private:
     std::string messageData;
+    std::string sender;
     void _serialize(char* addr);
 
 public:
-    ChatMessage(std::string_view _data) : messageData(_data) {}
+    ChatMessage(std::string_view _data, std::string_view _sender) : messageData(_data), sender(_sender) {}
     ChatMessage() : messageData("") {}
     virtual ~ChatMessage() {}
 

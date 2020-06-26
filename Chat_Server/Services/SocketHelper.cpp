@@ -45,12 +45,21 @@ bool SocketHelper::recvMessage(BaseMessage &message, MessageType type)
     if (!recvMeta(meta)){
         return false;
     }
-    char* data = new char[meta.contentSize];
+
+    char* data = nullptr;
+    try {
+        data = new char[meta.contentSize];
+    } catch (...) {
+        return false;
+    }
+
     bool success = clientSocket.recvRaw(data, meta.contentSize, &size);
     if (!success || meta.contentType != type){
         return false;
     }
     message.restore(data, size);
+    delete[] data;
+
     return true;
 }
 

@@ -16,5 +16,5 @@ std::pair<bool, string> ErrorHelper::parseRegistrationError(ErrorType error, std
 
 string ErrorHelper::messageNotSent(string_view message)
 {
-    return string(message) + " [message not sent, please reconnect]";
+    return "> " + string(message) + " [message not sent, please reconnect]";
 }

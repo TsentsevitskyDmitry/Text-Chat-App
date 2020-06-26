@@ -13,7 +13,7 @@ private:
 public:
     ConnectDialogController(ChatClient* _chat) : chat(_chat) {}
 
-    void connectButtonClicked(std::string ip, std::string port, std::string name);
+    bool connectButtonClicked(std::string ip, std::string port, std::string name);
     ConnectionSettings& getPrevSettings();
 };
 

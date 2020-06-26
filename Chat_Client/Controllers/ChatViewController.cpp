@@ -30,12 +30,38 @@ void ChatViewController::reportError(string_view error)
     }
 }
 
+void ChatViewController::removePrefix(string_view &text)
+{
+    if(!text.length()) return;
+    string_view::size_type n = 0;
+    char c = text[n];
+    while(c == ' ' || c == '\n' || c == '\r'){
+      ++n;
+      c  = text[n];
+    }
+    text.remove_prefix(n);
+}
+
+void ChatViewController::removePostfix(string_view &text)
+{
+    if(!text.length()) return;
+    string_view::size_type n = text.length();
+    char c = text[n - 1];
+    while(c == ' ' || c == '\n' || c == '\r'){
+      --n;
+      c  = text[n - 1];
+    }
+    text.remove_suffix(text.length() - n);
+}
 
 void ChatViewController::sendButtonClicked(string_view text)
 {
+    removePrefix(text);
+    removePostfix(text);
     if(!text.length()){
         return;
     }
+
     if(!chat.sendTextMessage(text)){
      reportError(ErrorHelper::messageNotSent(text));
     }
