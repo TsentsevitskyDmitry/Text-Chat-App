@@ -1,7 +1,5 @@
 #include "ClientProcessor.h"
 #include <omp.h>
-#include <vector>
-#include <thread>
 
 void ClientProcessor::process()
 {
@@ -12,7 +10,6 @@ void ClientProcessor::process()
     ChatMessage cm;
     while(helper.isClientConnected() && helper.recvChatMessage(cm))
     {
-        cout << clientName << ": " << cm.getData() << endl;
         broadcast(this->clientName, cm);
     }
 
@@ -56,7 +53,6 @@ bool ClientProcessor::tyrRegister()
         return false;
     }
     else{
-        cout << "User '" << this->clientName << "' connected!" << endl;
         helper.sendMessage(ErrorMessage(ErrorType::NO_ERROR_ERROR));
     }
     return true;

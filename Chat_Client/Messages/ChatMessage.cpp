@@ -11,13 +11,13 @@ void ChatMessage::_serialize(char *addr)
     size_t* messageDataSize = reinterpret_cast<size_t*>(addr);
     *messageDataSize = messageData.length();
     addr += sizeof (size_t);
-    memcpy(addr, messageData.c_str(), messageData.length());
+    memcpy(addr, messageData.data(), messageData.length());
     addr += messageData.length();
 
     size_t* senderSize = reinterpret_cast<size_t*>(addr);
     *senderSize = sender.length();
     addr += sizeof (size_t);
-    memcpy(addr, sender.c_str(), messageData.length());
+    memcpy(addr, sender.data(), sender.length());
 }
 
 bool ChatMessage::restore(char *data, size_t size)

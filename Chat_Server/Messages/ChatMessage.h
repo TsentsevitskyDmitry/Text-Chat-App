@@ -21,6 +21,7 @@ public:
 
     MessageType getMessageType();
     std::string getData();
+    std::string getSender();
 };
 
 #endif // CHATMESSAGE_H

@@ -17,6 +17,7 @@ public:
     bool read(char* buff, size_t buffSize, size_t* recvBytes);
     bool write(char* buff, size_t size);
     bool call(char* wrBuff, size_t wrSize, char* rdBuff, size_t rdSize, size_t* recvBytes);
+    int getLastErrorCode();
 };
 
 #endif // STATUSPIPE_H

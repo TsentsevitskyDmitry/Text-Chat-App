@@ -67,7 +67,6 @@ void ChatClient::startRecv()
         while (isRegistered() && helper.isConnected()){
             string text, sender;
             if(recvTextMessage(text ,sender) && recvCallbackFunction){
-                cout << "got: " << sender << ": " << text << endl;
                 recvCallbackFunction(sender + ": " + text);
             }
             else if (isRegistered() && errorCallbackFunction){

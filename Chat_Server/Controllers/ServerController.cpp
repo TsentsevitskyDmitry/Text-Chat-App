@@ -21,10 +21,8 @@ void ServerController::start()
         SOCKET clientSocket = server.acceptClient();
         //
         auto processor = [this] (SOCKET clientSocket) {
-            cout << "Client connected" << endl;
             ClientProcessor p(&server, clientSocket);
             p.process();
-            cout << "Client processed" << endl;
         };
 
         std::thread thread(processor,clientSocket);

@@ -30,3 +30,9 @@ bool StatusPipe::write(char *buff, size_t size)
       &cbWritten, nullptr);
     return cbWritten;
 }
+
+int StatusPipe::getLastErrorCode()
+{
+    return  GetLastError();
+}
+

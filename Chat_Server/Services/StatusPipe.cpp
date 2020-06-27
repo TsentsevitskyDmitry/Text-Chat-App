@@ -8,7 +8,7 @@ bool StatusPipe::create()
         PIPE_ACCESS_DUPLEX,
         PIPE_TYPE_MESSAGE | PIPE_WAIT,
         PIPE_UNLIMITED_INSTANCES,
-        512, 512, 1000, nullptr);
+        64, 64, 100, nullptr);
     return hNamedPipe != INVALID_HANDLE_VALUE;
 }
 

@@ -95,8 +95,7 @@ bool ServerSocket::sendRaw(char *data, size_t size)
             connected = false;
             return false;
         }
-
-        printf("Bytes Sent: %ld\n", iResult);
+//        printf("Bytes Sent: %ld\n", iResult);
         return true;
 }
 
@@ -104,7 +103,7 @@ bool ServerSocket::recvRaw(char* buff, size_t buffSize, size_t* recvBytes)
 {
     int iResult = recv(connectSocket, buff, static_cast<int>(buffSize), 0);
     if (iResult > 0) {
-        printf("Bytes received: %d\n", iResult);
+//        printf("Bytes received: %d\n", iResult);
     }
     else {
         printf("recv failed: %d\n", WSAGetLastError());
