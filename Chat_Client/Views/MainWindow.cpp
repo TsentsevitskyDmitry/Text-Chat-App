@@ -47,7 +47,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         if(event->type() == QKeyEvent::KeyPress)
         {
             QKeyEvent * ke = static_cast<QKeyEvent*>(event);
-            if(ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
+            if(ke->key() == Qt::Key_Return && ke->modifiers() == Qt::KeyboardModifier::NoModifier)
             {
                 on_sendButton_clicked();
                 return true; // do not process this event further

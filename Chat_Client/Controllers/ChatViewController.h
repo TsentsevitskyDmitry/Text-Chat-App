@@ -11,6 +11,8 @@ private:
     ChatClient chat;
     std::function<void(string)> errorMessageCallback;
     void reportError(std::string_view error);
+    void removePrefix(string_view& text);
+    void removePostfix(string_view& text);
 
 public:
     ChatClient* getChat();

@@ -33,7 +33,7 @@ public:
 
     bool sendTextMessage(std::string_view text);
 
-    bool recvTextMessage(std::string& text);
+    bool recvTextMessage(string &text, string &sender);
     void setTextMessageCallback(std::function<void(string)> callback);
     void setErrorMessageCallback(std::function<void(string)> callback);
 

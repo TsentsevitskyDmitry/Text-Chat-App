@@ -2,11 +2,13 @@
 
 ConnectionSettings ConnectDialogController::settings;
 
-void ConnectDialogController::connectButtonClicked(string ip, string port, string name)
+bool ConnectDialogController::connectButtonClicked(string ip, string port, string name)
 {
-    // validation here
+    if(!ip.length() || !port.length() || !name.length())
+        return false;
     settings = ConnectionSettings(ip, port, name);
     chat->setup(settings);
+    return true;
 }
 
 ConnectionSettings& ConnectDialogController::getPrevSettings()

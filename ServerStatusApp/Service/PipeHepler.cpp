@@ -1,8 +1,10 @@
 #include "PipeHepler.h"
+#include <iostream>
 
 bool PipeHepler::getStatus(ServerInfo& info)
 {
-    status.open();
+    bool res = status.open();
+    if (!res) return false;
     const size_t buffSize = ServerInfo::getSerializedSize();
     char buff[buffSize];
     size_t recvBytes;

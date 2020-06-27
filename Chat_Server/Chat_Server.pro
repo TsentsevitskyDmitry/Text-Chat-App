@@ -10,9 +10,9 @@ INCLUDEPATH += "D:/Shared/Libraries/include/"
 LIBS += -lws2_32
 
 SOURCES += \
+    main.cpp \
     Controllers/ServerController.cpp \
     Services/ClientProcessor.cpp \
-    main.cpp \
     Models/ClientInfo.cpp \
     Services/ChatServer.cpp \
     Messages/BaseMessage.cpp \
