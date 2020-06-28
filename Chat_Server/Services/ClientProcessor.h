@@ -21,7 +21,8 @@ private:
     bool tyrRegister();
     bool registerClient();
     void releaseClient();
-    void broadcast(std::string& sender, ChatMessage& message);
+    void broadcast(ChatMessage& message);
+    void broadcast(ChatMessage&& message);
 
 public:
     ClientProcessor(ChatServer* _server, SOCKET _socket) : server(_server), helper(_socket), info(&helper) {}

@@ -19,7 +19,6 @@ void ServerController::start()
 
     while(running){
         SOCKET clientSocket = server.acceptClient();
-        //
         auto processor = [this] (SOCKET clientSocket) {
             ClientProcessor p(&server, clientSocket);
             p.process();

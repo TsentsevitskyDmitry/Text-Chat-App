@@ -7,23 +7,35 @@ void ClientProcessor::process()
         return;
     }
 
+    // User connected
+    broadcast(ChatMessage("User '" + this->clientName + "' connected!", "Server"));
+
     ChatMessage cm;
     while(helper.isClientConnected() && helper.recvChatMessage(cm))
     {
-        broadcast(this->clientName, cm);
+        broadcast(cm);
     }
+
+    // User connected
+    broadcast(ChatMessage("User '" + this->clientName + "' leave!", "Server"));
 
     // Client disconected
     releaseClient();
 }
 
-void ClientProcessor::broadcast(string &sender, ChatMessage &message)
+void ClientProcessor::broadcast(ChatMessage &message)
 {
     message.serialize();
     server->lockClients();
     auto clients = server->getClients();
     int count = static_cast<int>(clients->size());
 
+    // *due to my benchmarking, needs serious testing*
+    // Thread sync overhead is greater than serial sending time in small queues.
+    // Parallel broadcasting will be useful only with a large number of clients.
+    // This is because send() func executes very fast.
+    // OpenMP gives even more overhead (because threads are created and destroyed more than once),
+    // but is used for portability and simplification of code.
     if(count >= 100) {
         // Use OpenMP
         omp_set_dynamic(0);
@@ -43,6 +55,12 @@ void ClientProcessor::broadcast(string &sender, ChatMessage &message)
 
     server->unlockClients();
 }               
+
+void ClientProcessor::broadcast(ChatMessage&& message)
+{
+    broadcast(message);
+}
+
 
 bool ClientProcessor::tyrRegister()
 {

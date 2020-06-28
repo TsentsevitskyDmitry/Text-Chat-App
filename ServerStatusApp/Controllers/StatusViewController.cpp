@@ -160,7 +160,6 @@ void StatusViewController::removeButtonPressed()
     updateButtonPressed();
 }
 
-
 void StatusViewController::startButtonPressed()
 {
     SC_HANDLE hSCManager = OpenSCManager(nullptr, nullptr, SC_MANAGER_CREATE_SERVICE);
