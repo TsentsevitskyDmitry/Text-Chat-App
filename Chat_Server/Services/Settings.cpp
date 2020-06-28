@@ -1,7 +1,21 @@
 #include "Settings.h"
 
+void Settings::fileNotFound(pt::ptree& tree, std::string& port)
+{
+    port = default_port;
+    tree.put("chat_server.port", port);
+    try {
+        std::ofstream file(filepath);
+        file.close(); // Create file
+        pt::write_xml(filepath, tree);
+    } catch (...) {
+        // nothing to do
+    }
+}
+
 bool Settings::getConfig(ServerConfig& config)
 {
+    bool success = false;
     std::string port;
     pt::ptree tree;
     try {
@@ -10,14 +24,8 @@ bool Settings::getConfig(ServerConfig& config)
     }
     catch (const pt::ptree_error & ex)
     {
-        std::cout << ex.what() << std::endl;
-        port = "27015";
-        tree.put("chat_server.port", port);
-        std::ofstream file(filepath);
-        file.close();
-        pt::write_xml(filepath, tree);
-        return false;
+        fileNotFound(tree, port);
     }
     config.setPort(port);
-    return true;
+    return success;
 }

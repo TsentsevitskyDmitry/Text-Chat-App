@@ -12,6 +12,8 @@ namespace pt = boost::property_tree;
 class Settings {
 private:
     static constexpr char filepath[] = "C:\\ChatServer\\config.xml";
+    static constexpr char default_port[] = "27015";
+    static void fileNotFound(pt::ptree& tree, std::string& port);
 
 public:
     static bool getConfig(ServerConfig& config);
