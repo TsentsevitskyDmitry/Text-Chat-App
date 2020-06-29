@@ -16,8 +16,8 @@ void ClientProcessor::process()
         broadcast(cm);
     }
 
-    // User connected
-    broadcast(ChatMessage("User '" + this->clientName + "' leave!", "Server"));
+    // User disconected
+    broadcast(ChatMessage("User '" + this->clientName + "' disconected!", "Server"));
 
     // Client disconected
     releaseClient();

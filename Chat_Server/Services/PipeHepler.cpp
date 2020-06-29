@@ -16,7 +16,6 @@ void PipeHepler::waitAndSend()
     pipe.waitClient();
     chat->lockClients();
     ServerInfo info(static_cast<uint32_t>(chat->getClients()->size()), chat->getRunnigPort());
-//    ServerInfo info(228, 1337);
     chat->unlockClients();
     setStatus(info);
     pipe.disconnect();
